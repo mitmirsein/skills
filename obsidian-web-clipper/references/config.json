@@ -1,0 +1,10 @@
+{
+  "default_vault_path": "~/Desktop/MS_Brain.nosync",
+  "default_save_dir": "Clippings",
+  "default_tags": ["clippings"],
+  "filename_format": "{page_title}.md",
+  "filename_sanitize_chars": "\\/:*?\"<>|",
+  "filename_replace_with": "_",
+  "skip_domains": [],
+  "pdf_redirect_to_skill": "pdf-extractor"
+}

@@ -1,0 +1,18 @@
+# 머신 로컬 / 임시 — 버전 관리 대상 아님 (머신별로 따로 생성)
+.venv*/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+.DS_Store
+.playwright-cli/
+
+# 무거운 바이너리 / 캐시 / 생성 산출물 (소스 아님 — 필요 시 재생성)
+stealth-browser/bin/
+pdf-extractor/output/
+grafeo-connector/data/
+**/data/browser_state/
+
+# 메타 감사 산출물 (validate.py가 재생성)
+_meta/audit.json

@@ -1,0 +1,9 @@
+# 생성 산출물 (회귀 픽스처인 *_cleaned.md 는 보존)
+.DS_Store
+__pycache__/
+output/*_healed.md
+output/*_healed.report.md
+output/*_vision_raw.md
+output/*_images/
+
+# 픽스처로 유지: output/*_cleaned.md, output/*.md, output/*.json

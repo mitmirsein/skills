@@ -1,0 +1,7 @@
+{
+  "max_summary_length": 300,
+  "prefer_search_engine": "google",
+  "log_retention_days": 7,
+  "ephemeral_storage_path": "/tmp/btw_active.log",
+  "auto_promote_keywords": ["bug", "critical", "fix", "decision", "architecture"]
+}

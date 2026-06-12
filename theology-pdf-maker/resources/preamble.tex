@@ -1,0 +1,17 @@
+\usepackage{kotex}
+\usepackage{csquotes}
+
+% Set main Latin fonts (using Brill font for humanities scholars)
+\setmainfont{Brill}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+% Set Korean Hangul fonts using Noto Serif KR (with slightly negative letter spacing for better readability)
+\setmainhangulfont{Noto Serif KR}[InterHangul=-0.04em]
+
+
+% Set SBL fonts for Greek and Hebrew macros
+\newfontfamily\greekfont{SBL Greek}
+\newfontfamily\hebrewfont{SBL Hebrew}
+\newcommand{\textgreek}[1]{{\greekfont #1}}
+\newcommand{\texthebrew}[1]{{\hebrewfont #1}}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "NLK Subject Searcher"
+  short_description: "Search and expand NLK subject headings."
+  default_prompt: "Use the National Library of Korea subject information API to normalize and expand a research term with preferred, broader, narrower, and related subject headings."

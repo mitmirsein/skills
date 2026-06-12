@@ -1,0 +1,6 @@
+triggers:
+  "#theology-discourse-mapper": theology_discourse_mapper
+  "#담론분석": theology_discourse_mapper
+  "담론분석해줘": theology_discourse_mapper
+  "학자논쟁맵 그려줘": theology_discourse_mapper
+  "theology-discourse-mapper 실행": theology_discourse_mapper

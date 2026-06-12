@@ -1,0 +1,7 @@
+name: "Systematic Theology Lens"
+focus_areas:
+  - "Proposition Extraction & Formalization (신학적 명제 추출 및 논증 형식화)"
+  - "Logical & Dogmatic Consistency (논리적 및 교의적 일관성)"
+  - "Aporia & Interpretive Tension (아포리아 및 해석학적 긴장)"
+analysis_prompt: |
+  Extract theological propositions and formalize arguments into premises and conclusions. Examine logical consistency, dogmatic alignment, and internal tensions/aporia.

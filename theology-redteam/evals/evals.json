@@ -1,0 +1,38 @@
+{
+  "tests": [
+    {
+      "name": "Amos4_v1_Gap_Detection_Test",
+      "description": "Amos4 v1 개요에 대해 칠십인역 번역과 요한복음 기독론 사이의 200년 갭을 레드팀이 잡아내는지 평가한다.",
+      "input": {
+        "ontology": [
+          {"subject": "LXX Amos 4:13", "predicate": "translates 'me-siho' as", "object": "ton christon autou (His Christ)"},
+          {"subject": "LXX Amos 4:13", "predicate": "directly connects to", "object": "John 1:14 (Incarnation of Logos)"}
+        ],
+        "outline": [
+          {
+            "section": "3.2 LXX의 그리스도 번역",
+            "content": "아모스 4:13의 MT(말씀)가 LXX에서 그리스도로 번역된 사실을 보이고, 이것이 요한복음 1장의 성육신적 기독론으로 직접 이어진다는 사실을 선언한다. Tov의 Textual Criticism을 인용하여 번역가의 신학적 의도를 입증한다."
+          }
+        ]
+      },
+      "assertions": [
+        {
+          "type": "contains_section",
+          "target": "[Leap-Alert]"
+        },
+        {
+          "type": "contains_section",
+          "target": "[Gap-Filling Directives]"
+        },
+        {
+          "type": "logic_check",
+          "rule": "Output must explicitly identify the chronological/theological gap between 2nd Century BCE (LXX) and 1st Century CE (John's Gospel), pointing out the leap from translation to Johannine Logos Christology."
+        },
+        {
+          "type": "recommendation_check",
+          "rule": "Output must recommend Second Temple literature (such as Wisdom of Solomon or Ben Sira) or patristic sources (such as Athanasius) as bridging elements."
+        }
+      ]
+    }
+  ]
+}

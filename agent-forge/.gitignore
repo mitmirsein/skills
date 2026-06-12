@@ -1,0 +1,10 @@
+# agent-forge 위생: 임시 정찰물·벤더 클론·산출 잔존물 추적 제외
+.DS_Store
+__pycache__/
+temp_*/
+_scratch/
+*_scout_*/
+# 외부 레포를 참고로 둘 경우 _vendor/ 사용하되 중첩 .git 은 금지
+_vendor/**/.git/
+# eval 실행 산출물(요약 로그는 보존)
+evals/_results/*.json

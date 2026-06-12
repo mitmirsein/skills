@@ -1,0 +1,16 @@
+[project]
+name = "hwp-converter"
+version = "0.1.0"
+description = "HWP/HWPX to Markdown conversion skill with multi-engine fallback"
+authors = [{ name = "msn" }]
+dependencies = [
+    "pyhwp>=0.1.13",
+    "html2text>=2024.2.26",
+    "beautifulsoup4>=4.12.3",
+    "lxml>=5.2.1",
+]
+requires-python = ">=3.10"
+
+[tool.uv]
+managed = true
+dev-dependencies = []

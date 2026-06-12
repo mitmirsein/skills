@@ -1,0 +1,8 @@
+name: "theology-terminology-linter"
+version: "1.0.0"
+entrypoint: "scripts/terminology_linter.py"
+triggers:
+  - "#theology-terminology-linter"
+  - "#용어린터"
+  - "신학 용어 일관성 검사해줘"
+  - "용어 혼용 검사해줘"

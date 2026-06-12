@@ -1,0 +1,6 @@
+triggers:
+  "#theology-exegesis": theology_exegesis
+  "#신학석의": theology_exegesis
+  "#신학해석": theology_exegesis
+  "신학 렌즈 분석해줘": theology_exegesis
+  "본문 주해해줘": theology_exegesis

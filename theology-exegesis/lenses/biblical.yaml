@@ -1,0 +1,7 @@
+name: "Biblical Studies Lens"
+focus_areas:
+  - "Morphosyntactic Analysis (형태-통사론 분석)"
+  - "Historical-Literary Criticism (역사-문학 비평)"
+  - "Canonical Synthesis (정경적 종합)"
+analysis_prompt: |
+  Examine the original grammatical structures, semantic fields of key words, historical-literary context (Sitz im Leben), and canonical synthesis. Avoid eisegesis.

@@ -1,0 +1,6 @@
+triggers:
+  "#theology-citation-linker": theology_citation_linker
+  "#각주연결": theology_citation_linker
+  "각주 연결해줘": theology_citation_linker
+  "인용 매핑해줘": theology_citation_linker
+  "theology-citation-linker 실행": theology_citation_linker

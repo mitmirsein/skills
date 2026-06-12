@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "created": "2026-03-29",
+    "framework": "Harness With-Skill vs Baseline Testing Doctrine",
+    "description": "MS_Dev 핵심 스킬 3종에 대한 실전 테스트 케이스 정의. agent-forge가 새 스킬 배치 전 반드시 이 형식으로 evals를 작성해야 한다.",
+    "how_to_run": "evals/README.md 참조"
+  },
+
+  "skills": [
+
+    {
+      "skill_id": "agent-forge",
+      "skill_version": "6.1.0",
+      "trigger_keywords": ["#forge", "#제작소", "에이전트 설계해줘", "create a new skill"],
+
+      "test_cases": [
+        {
+          "id": "AF-01",
+          "label": "핵심 사용 사례: 새 스킬 설계 요청",
+          "difficulty": "basic",
+          "with_skill_prompt": "신학 논문의 참고문헌 목록(BibTeX 또는 주석 형태)을 입력받아 SBL 규격으로 자동 변환해주는 에이전트 스킬을 설계해줘. #forge",
+          "baseline_prompt": "신학 논문의 참고문헌 목록(BibTeX 또는 주석 형태)을 입력받아 SBL 규격으로 자동 변환해주는 에이전트 스킬을 설계해줘.",
+          "assertions": [
+            {"id": "a1", "description": "SKILL.md 파일이 생성되었는가?", "check": "output_contains('SKILL.md')"},
+            {"id": "a2", "description": "references/ 디렉토리 구조가 포함되었는가?", "check": "output_contains('references/')"},
+            {"id": "a3", "description": "gotchas.md가 언급되었는가?", "check": "output_contains('gotchas')"},
+            {"id": "a4", "description": "YAML frontmatter가 포함되었는가?", "check": "output_contains('name:') and output_contains('description:') and output_contains('triggers:')"},
+            {"id": "a5", "description": "Why-Factor(이유 기반 작성)가 본문에 적용되었는가?", "check": "output_contains('왜') or output_contains('because') or output_contains('이유') or output_contains('때문') or output_contains('Why-First')"}
+          ]
+        },
+        {
+          "id": "AF-02",
+          "label": "엣지 케이스: 이미 유사 스킬 존재 시 중복 방지",
+          "difficulty": "advanced",
+          "with_skill_prompt": "신학 문서를 검색해주는 스킬을 만들어줘. #forge",
+          "baseline_prompt": "신학 문서를 검색해주는 스킬을 만들어줘.",
+          "assertions": [
+            {"id": "a1", "description": "기존 theology-searcher와의 충돌을 인지했는가?", "check": "output_contains('theology-searcher') or output_contains('중복') or output_contains('기존')"},
+            {"id": "a2", "description": "무조건 새 스킬 생성을 강행하지 않고 확인/수정을 제안했는가?", "check": "output_contains('확인') or output_contains('기존 스킬') or output_contains('extend')"}
+          ]
+        },
+        {
+          "id": "AF-03",
+          "label": "복합 작업: 팀 아키텍처 패턴 적용 스킬 설계",
+          "difficulty": "expert",
+          "with_skill_prompt": "여러 명의 신학자 에이전트가 협력하여 한 본문을 다양한 관점(역사비평, 조직신학, 목회적 적용)으로 분석하는 팀 스킬을 설계해줘. #forge",
+          "baseline_prompt": "여러 명의 신학자 에이전트가 협력하여 한 본문을 다양한 관점(역사비평, 조직신학, 목회적 적용)으로 분석하는 팀 스킬을 설계해줘.",
+          "assertions": [
+            {"id": "a1", "description": "Fan-out/Fan-in 또는 Expert Pool 패턴 언급이 있는가?", "check": "output_contains('Fan-out') or output_contains('팬아웃') or output_contains('Expert Pool') or output_contains('전문가 풀')"},
+            {"id": "a2", "description": "에이전트 분리 기준(전문성/병렬성)이 언급되었는가?", "check": "output_contains('병렬') or output_contains('parallel') or output_contains('전문')"},
+            {"id": "a3", "description": "통합(Fan-in) 단계가 설계에 포함되었는가?", "check": "output_contains('통합') or output_contains('synthesis') or output_contains('merge')"}
+          ]
+        }
+      ]
+    },
+
+    {
+      "skill_id": "theology-searcher",
+      "skill_version": "4.0.0",
+      "trigger_keywords": ["#rag", "#검색", "바르트", "신학 자료 찾아줘"],
+
+      "test_cases": [
+        {
+          "id": "TS-01",
+          "label": "핵심 사용 사례: 3중 언어 확장 검색",
+          "difficulty": "basic",
+          "with_skill_prompt": "바르트의 화해론에서 '대리'(Stellvertretung) 개념 관련 자료 찾아줘. #rag",
+          "baseline_prompt": "바르트의 화해론에서 '대리'(Stellvertretung) 개념 관련 자료 찾아줘.",
+          "assertions": [
+            {"id": "a1", "description": "한국어/영어/독어 3중 확장 검색이 수행되었는가?", "check": "output_contains('Stellvertretung') or output_contains('substitution') or output_contains('대리')"},
+            {"id": "a2", "description": "msn_th_db 경로에서 검색이 시도되었는가?", "check": "output_contains('msn_th_db') or output_contains('.jsonl')"},
+            {"id": "a3", "description": "검색 결과가 청크(chunk) 형태로 반환되었는가?", "check": "output_contains('chunk') or output_contains('출처') or output_contains('source')"}
+          ]
+        },
+        {
+          "id": "TS-02",
+          "label": "엣지 케이스: 검색 결과 0건 시 처리",
+          "difficulty": "advanced",
+          "with_skill_prompt": "2024년 이후 출판된 '메타버스 신학' 관련 자료 찾아줘. #rag",
+          "baseline_prompt": "2024년 이후 출판된 '메타버스 신학' 관련 자료 찾아줘.",
+          "assertions": [
+            {"id": "a1", "description": "결과 없음을 명확히 고지했는가?", "check": "output_contains('결과 없음') or output_contains('찾을 수 없') or output_contains('0 results') or output_contains('해당 자료')"},
+            {"id": "a2", "description": "무작위 생성(Hallucination)으로 결과를 채우지 않았는가?", "check": "NOT output_contains('메타버스 신학의 핵심은') and NOT output_contains('해당 논문에 따르면')"},
+            {"id": "a3", "description": "대안 검색어를 제안했는가?", "check": "output_contains('제안') or output_contains('대신') or output_contains('alternative')"}
+          ]
+        }
+      ]
+    },
+
+    {
+      "skill_id": "bible-meditation",
+      "skill_version": "4.0.0",
+      "trigger_keywords": ["#묵상", "성서 묵상하자", "묵상 모드 시작"],
+
+      "test_cases": [
+        {
+          "id": "BM-01",
+          "label": "핵심 사용 사례: 표준 ARC 묵상 프로토콜 실행",
+          "difficulty": "basic",
+          "with_skill_prompt": "로마서 5:1-5 묵상하자. #묵상",
+          "baseline_prompt": "로마서 5:1-5에 대해 묵상 글을 써줘.",
+          "assertions": [
+            {"id": "a1", "description": "Analysis 단계가 수행되었는가? (석의/본문 분석)", "check": "output_contains('분석') or output_contains('원문') or output_contains('문맥')"},
+            {"id": "a2", "description": "Dialogue 단계가 수행되었는가? (대화형 탐구)", "check": "output_contains('질문') or output_contains('어떻게') or output_contains('왜')"},
+            {"id": "a3", "description": "Article 단계가 수행되었는가? (묵상 아티클 생성)", "check": "len(output) > 500"},
+            {"id": "a4", "description": "신학 용어가 적절히 사용되었는가?", "check": "output_contains('칭의') or output_contains('평화') or output_contains('소망') or output_contains('성령')"},
+            {"id": "a5", "description": "200 System 폴더 저장이 안내되었는가?", "check": "output_contains('200') or output_contains('Ministry') or output_contains('저장')"}
+          ]
+        },
+        {
+          "id": "BM-02",
+          "label": "엣지 케이스: 어려운 구약 본문 (레위기/민수기)",
+          "difficulty": "advanced",
+          "with_skill_prompt": "레위기 11:1-8 정결 규정 묵상하자. #묵상",
+          "baseline_prompt": "레위기 11:1-8 정결 규정에 대해 묵상 글을 써줘.",
+          "assertions": [
+            {"id": "a1", "description": "직접 적용의 무리한 시도 없이 신학적 맥락을 설명했는가?", "check": "output_contains('언약') or output_contains('거룩') or output_contains('구별')"},
+            {"id": "a2", "description": "신약과의 연결(성취/대조)을 시도했는가?", "check": "output_contains('신약') or output_contains('예수') or output_contains('그리스도') or output_contains('성취')"},
+            {"id": "a3", "description": "목회적 적용을 제시했는가?", "check": "output_contains('오늘') or output_contains('우리') or output_contains('삶')"}
+          ]
+        }
+      ]
+    }
+
+  ]
+}

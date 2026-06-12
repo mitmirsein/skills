@@ -1,0 +1,5 @@
+triggers:
+  "#ixtheo": ixtheo_searcher
+  "#ixto": ixtheo_searcher
+  "튀빙엔 검색": ixtheo_searcher
+  "ixtheo search": ixtheo_searcher

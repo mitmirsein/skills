@@ -1,0 +1,5 @@
+triggers:
+  "#theology-research": theology_research
+  "#신학연구": theology_research
+  "신학 연구해줘": theology_research
+  "theology-research 실행": theology_research

@@ -1,0 +1,6 @@
+name: "Historical Theology Lens"
+focus_areas:
+  - "Historical & Creeds Alignment (역사적 맥락 및 신조 검토)"
+  - "Ideological Continuity & Discontinuity (사상사적 연속성/불연속성)"
+analysis_prompt: |
+  Examine historical context, councils (Nicene, Chalcedonian), confessions, and the continuity or discontinuity of the theological thoughts throughout history.

@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "version": "10.5.0",
+    "role": "Skill-level configuration. 프로젝트 엔진 경로 등 환경 의존적 설정을 이 파일에서만 관리.",
+    "boundary_principle": "스킬은 이 파일의 engine_root를 통해서만 프로젝트 파일에 접근한다. SKILL.md에 경로를 하드코딩하지 않는다."
+  },
+  "dev_root": "~/Desktop/MS_Dev.nosync",
+  "brain_root": "~/Desktop/MS_Brain.nosync",
+  "engine_root": "~/Desktop/MS_Dev.nosync/projects/easy-review-system",
+  "default_entry_point": "prompts/unified_review.json.md",
+  "special_entry_point":  "prompts/critical_review.json.md",
+  "phase0_prompt":        "prompts/agentic_gather.json.md",
+  "annotation_tokens":    "configs/annotation_tokens.json",
+  "master_config":        "configs/master_config.json.md",
+  "default_mode": "unified_professional_review",
+  "analysis_dimensions": 8,
+  "language_standard": "Korean Protestant Academic",
+  "integration": {
+    "semantic_scholar_api": {
+      "enabled": true,
+      "runner_path": "~/Desktop/MS_Dev.nosync/.skills/semantic-scholar/scripts/s2_runner.py",
+      "max_queries": 3,
+      "results_per_query": 5,
+      "note": "Semantic Scholar Graph API — 구조화된 메타데이터(제목/저자/초록/DOI) 반환"
+    },
+    "google_scholar_semantic": {
+      "enabled": true,
+      "runner_path": "~/Desktop/MS_Dev.nosync/.skills/google-scholar-semantic/scripts/scholar_runner.py",
+      "max_queries": 6,
+      "results_per_query": 10,
+      "max_queries_per_session": 4,
+      "citation_depth": "all",
+      "wait_seconds": 40,
+      "timeout_seconds": 900,
+      "domain": "theology",
+      "tre_expand": true,
+      "require_tty": true,
+      "headless": false,
+      "note": "Google Scholar Labs — theology 도메인에서만 TRE 쿼리 확장 + 40초 Wait Protocol + JSONL EvidencePack 주입"
+    },
+    "google_scholar_quick": {
+      "enabled": true,
+      "script_path": "~/Desktop/MS_Dev.nosync/.skills/google-scholar-quick/google_scholar_quick_search.sh",
+      "max_queries": 2,
+      "results_per_query": 3,
+      "note": "Google Scholar CDP 브라우저 기반 — 일반 구글 스콜라 검색"
+    },
+    "ixtheo_searcher": {
+      "enabled": true,
+      "script_path": "~/Desktop/MS_Dev.nosync/.skills/ixtheo-searcher/scripts/ixtheo_searcher.py",
+      "max_queries": 2,
+      "results_per_query": 5,
+      "note": "Tübingen Index Theologicus (IxTheo) Searcher — PoW 우회 및 RIS 상세 메타데이터"
+    },
+    "crossref_journal_searcher": {
+      "enabled": true,
+      "script_path": "~/Desktop/MS_Dev.nosync/.skills/crossref-journal-searcher/scripts/crossref_journal_searcher.py",
+      "max_queries": 2,
+      "results_per_query": 5,
+      "note": "Crossref Premium Theology Journal Searcher — 58개 저널 대상 분할(Chunking) 검색"
+    },
+    "kci_searcher": {
+      "enabled": true,
+      "script_path": "~/Desktop/MS_Dev.nosync/.skills/kci-api-searcher/scripts/search.py",
+      "max_queries": 2,
+      "results_per_query": 5,
+      "note": "KCI (한국학술지인용색인) Searcher — OAI-PMH 및 ForensicAudit 연동"
+    },
+    "riss_searcher": {
+      "enabled": true,
+      "script_path": "~/Desktop/MS_Dev.nosync/.skills/riss-searcher/scripts/search.py",
+      "max_queries": 2,
+      "results_per_query": 5,
+      "note": "RISS (학술연구정보서비스) Searcher — curl_cffi TLS 우회 및 ForensicAudit 연동"
+    },
+    "internal_db": {
+      "enabled": false,
+      "note": "msn_th_db — 영구 비활성화. 향후 연동 시 이 플래그를 true로 변경할 것."
+    }
+  },
+  "output": {
+    "review_reports": "~/Desktop/MS_Brain.nosync/000 System/Inbox/Review_Reports",
+    "evidence_packs":  "~/Desktop/MS_Brain.nosync/000 System/Inbox/Evidence",
+    "session_logs":    "~/Desktop/MS_Brain.nosync/900 Archive/Review_Logs",
+    "format": "markdown"
+  },
+  "guardrails": {
+    "arc_v4_compliance": true,
+    "no_numeric_scoring": true,
+    "dual_lens_required": true,
+    "evidence_stewardship": true,
+    "executive_summary_required": true,
+    "summary_layout": "Premium (Callout & Table)"
+  }
+}

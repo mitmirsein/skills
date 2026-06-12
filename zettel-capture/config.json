@@ -1,0 +1,10 @@
+{
+  "zettel_dir": "~/Desktop/MS_Brain.nosync/000 System/Inbox/Zettelkasten",
+  "default_type": "literature",
+  "prompting_enabled": false,
+  "max_connection_suggestions": 3,
+  "fleeting_stale_days": 30,
+  "tag_presets": ["신학", "철학", "인문학", "기술", "AI", "설교", "묵상"],
+  "id_format": "YYYYMMDD-NNN",
+  "filename_pattern": "{zettel_id}_{short_title}.md"
+}

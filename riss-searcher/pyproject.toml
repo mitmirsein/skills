@@ -1,0 +1,14 @@
+[project]
+name = "riss-searcher"
+version = "1.0.0"
+description = "RISS 논문 검색 CLI — InsaneRecon TLS 우회 + ForensicAudit"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.28.1",
+    "beautifulsoup4>=4.12.0",
+    "curl-cffi>=0.7.0",
+]
+
+[tool.uv]
+# curl_cffi: TLS 핑거프린트 위장 필수 의존성
+# uv run python search.py 로 직접 실행 가능

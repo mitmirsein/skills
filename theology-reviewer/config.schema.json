@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "theology-reviewer.config.schema.json",
+  "title": "Theology Reviewer Skill Config",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["_meta", "engine_root", "integration", "output", "guardrails"],
+  "properties": {
+    "_meta": {
+      "type": "object",
+      "required": ["schema_version", "version"],
+      "properties": {
+        "schema_version": { "type": "integer", "const": 1 },
+        "version": { "type": "string" }
+      }
+    },
+    "dev_root": { "type": "string" },
+    "brain_root": { "type": "string" },
+    "engine_root": { "type": "string" },
+    "integration": {
+      "type": "object",
+      "properties": {
+        "semantic_scholar_api": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "runner_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "google_scholar_semantic": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "runner_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 },
+            "max_queries_per_session": { "type": "integer", "minimum": 1, "maximum": 4 },
+            "citation_depth": { "type": "string", "enum": ["all", "top5", "none"] },
+            "wait_seconds": { "type": "integer", "minimum": 0 },
+            "domain": { "type": "string", "enum": ["general", "theology"] },
+            "tre_expand": { "type": "boolean" },
+            "require_tty": { "type": "boolean" },
+            "headless": { "type": "boolean" }
+          }
+        },
+        "google_scholar_quick": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "script_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "ixtheo_searcher": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "script_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "crossref_journal_searcher": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "script_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "kci_searcher": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "script_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "riss_searcher": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "script_path": { "type": "string" },
+            "max_queries": { "type": "integer", "minimum": 1 },
+            "results_per_query": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "review_reports": { "type": "string" },
+        "evidence_packs": { "type": "string" },
+        "session_logs": { "type": "string" },
+        "format": { "type": "string" }
+      }
+    }
+  }
+}
