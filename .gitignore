@@ -16,3 +16,8 @@ grafeo-connector/data/
 
 # 메타 감사 산출물 (validate.py가 재생성)
 _meta/audit.json
+
+# 스킬 실행 로그 / 에디터 / 생성 산출물 (양쪽 맥 churn 방지)
+**/history.log
+**/results/*.log
+.vscode/
