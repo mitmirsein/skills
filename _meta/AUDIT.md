@@ -35,7 +35,7 @@
 | git-workflow | A | dev-tools | 52 | — |
 | github-ops | A | dev-tools | 54 | — |
 | google-scholar-quick | A | academic-search | 52 | — |
-| google-scholar-semantic | A | academic-search | 107 | — |
+| google-scholar-semantic | A | academic-search | 108 | — |
 | grafeo-connector | A | utilities | 66 | — |
 | hwp-converter | A | media | 54 | — |
 | insane-search | A | dev-tools | 105 | — |
