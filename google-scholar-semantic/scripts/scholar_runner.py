@@ -391,204 +391,102 @@ async def _run_semantic_crawl_session(
     max_results: int = 10,
     citation_depth: str = DEFAULT_CITATION_DEPTH,
 ) -> list[tuple[int, str]]:
-    from agents.stealth_browser import StealthBrowser
+    import urllib.parse
+    import sys
+    import json
+    from datetime import datetime
+    from pathlib import Path
+    
+    SCRIPTS_PATH = Path(__file__).resolve().parent
+    if str(SCRIPTS_PATH) not in sys.path:
+        sys.path.append(str(SCRIPTS_PATH))
+        
+    from scholar_escalator import ScholarEscalator
+    from bs4 import BeautifulSoup
 
-    bot = StealthBrowser(headless=headless, channel=browser_channel)
+    escalator = ScholarEscalator()
     captured_files: list[tuple[int, str]] = []
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    try:
-        print("Scholar Semantic browser session launching...")
-        await bot.start()
-        await bot.browse(SCHOLAR_URL)
-        print(f"Initial Scholar URL: {bot.page.url}")
+    total = total_queries or len(queries)
+    for local_i, query in enumerate(queries, 1):
+        global_i = start_query_index + local_i
+        print(f"\n[Query {global_i}/{total}] Processing (Hybrid Escalation)...")
+        print(f"   Q: {query[:80]}...")
 
-        print("ACTION REQUIRED: Please log in manually if not already logged in.")
-        print("Waiting for valid Scholar URL (scholar.google.com)...")
+        try:
+            # 1. Construct URL
+            query_url = f"https://scholar.google.com/scholar_labs/search?hl=ko&q={urllib.parse.quote(query)}"
+            
+            # 2. Fetch HTML using the escalator
+            content = await escalator.fetch_with_escalation(
+                query_url, 
+                success_selectors=[".gs_r"]
+            )
 
-        login_success = False
-        polls = max(1, login_timeout_seconds // 2)
-        for i in range(polls):  # Default: wait up to 5 min
-            current_url = bot.page.url
-            if i == 0 or i == polls - 1:
-                print(f"Current URL: {current_url}")
-            if "scholar.google" in current_url and "accounts.google" not in current_url:
-                login_success = True
-                print("Login detected. Resuming mission...")
-                break
-            await asyncio.sleep(2)
+            # 3. Parse HTML and extract data-cids
+            soup = BeautifulSoup(content, "html.parser")
+            results = soup.select(".gs_r")
+            
+            # Clamp results limit
+            results = results[:max_results]
+            
+            cids = []
+            for res in results:
+                cid = res.attrs.get("data-cid")
+                if cid:
+                    cids.append(cid)
 
-        if not login_success:
-            print("Login timeout.")
-            return []
+            # 4. Fetch BibTeX APIs in parallel
+            bibtex_map = {}
+            if citation_depth != "none" and cids:
+                bibtex_limit = min(len(cids), 5 if citation_depth == "top5" else max_results)
+                cids_to_fetch = cids[:bibtex_limit]
+                bibtex_map = await escalator.fetch_bibtex_direct(cids_to_fetch)
 
-        if "scholar_labs" not in bot.page.url:
-            await bot.browse(SCHOLAR_URL)
-            await asyncio.sleep(5)
-
-        total = total_queries or len(queries)
-        for local_i, query in enumerate(queries, 1):
-            global_i = start_query_index + local_i
-            print(f"\n[Query {global_i}/{total}] Processing...")
-            print(f"   Q: {query[:80]}...")
-
-            try:
-                input_selector = None
-                candidates = [
-                    "textarea#gs_as_i_t",
-                    "textarea[name='q']",
-                    "textarea",
-                    "input[type='text']",
-                    "div[contenteditable='true']",
-                    "#gs_hdr_tsi",
-                    "[aria-label='Search']",
-                ]
-                for sel in candidates:
-                    locator = bot.page.locator(sel)
-                    if await locator.count() > 0 and await locator.first.is_visible():
-                        input_selector = sel
-                        break
-
-                if not input_selector:
-                    debug_path = output_dir / f"scholar_labs_input_missing_{global_i}.html"
-                    debug_path.write_text(await bot.page.content(), encoding="utf-8")
-                    print(f"Input missing for Query {global_i}; saved debug HTML: {debug_path}")
-                    continue
-
-                await bot.mouse.click_element(selector=input_selector)
-                await bot.page.keyboard.press("Meta+A")
-                await bot.page.keyboard.press("Backspace")
-                await asyncio.sleep(0.5)
-                await bot.page.keyboard.type(query, delay=random.randint(20, 50))
-                await bot.page.keyboard.press("Enter")
-
-                started_at = time.monotonic()
-                print("Monitoring Scholar Labs status...")
-                status_pattern = re.compile(r"(?:관련 검색 결과|Related search results).*?(\d+)")
-                found_results = False
-
-                for _ in range(120):  # 2 mins max
-                    content = await bot.page.content()
-                    matches = status_pattern.findall(content)
-
-                    if matches:
-                        print(f"Result signal detected ({matches[-1]} results).")
-                        found_results = True
-                        break
-
-                    if "평가됨" in content or "Evaluat" in content:
-                        sys.stdout.write(".")
-                        sys.stdout.flush()
-
-                    await asyncio.sleep(2)
-
-                elapsed = time.monotonic() - started_at
-                remaining = max(0, wait_seconds - int(elapsed))
-                if remaining:
-                    print(f"\nWait Protocol: sleeping {remaining}s to satisfy {wait_seconds}s minimum.")
-                    await asyncio.sleep(remaining)
-
-                if not found_results:
-                    print("Completion signal not found. Proceeding with visible results.")
-
-                if citation_depth == "none":
-                    citation_limit = 0
-                elif citation_depth == "top5":
-                    citation_limit = min(5, max_results)
+            # 5. Inject BibTeX metadata back into HTML element attributes (backward-compatible)
+            for res in results:
+                cid = res.attrs.get("data-cid")
+                if cid and cid in bibtex_map and bibtex_map[cid]:
+                    bib_content = bibtex_map[cid]
+                    
+                    # Parse BibTeX to extract Author, Title, Year
+                    title_m = re.search(r"title\s*=\s*\{([^}]+)\}", bib_content, re.IGNORECASE)
+                    author_m = re.search(r"author\s*=\s*\{([^}]+)\}", bib_content, re.IGNORECASE)
+                    year_m = re.search(r"year\s*=\s*\{([^}]+)\}", bib_content, re.IGNORECASE)
+                    
+                    author = author_m.group(1) if author_m else "Unknown"
+                    title = title_m.group(1) if title_m else "Untitled"
+                    year = year_m.group(1) if year_m else "N.D."
+                    primary_cite = f"{author} ({year}). {title}."
+                    
+                    citation_payload = {
+                        "formatted": ["", primary_cite],
+                        "links": [{"label": "BibTeX", "url": ""}],
+                        "bibtex": bib_content
+                    }
+                    res["data-extracted-citation"] = primary_cite
+                    res["data-extracted-citation-json"] = json.dumps(citation_payload, ensure_ascii=False)
+                    res["data-citation-status"] = "ok"
+                    
+                    sys.stdout.write(f" [{results.index(res) + 1}:OK] ")
                 else:
-                    citation_limit = max_results
+                    res["data-citation-status"] = "missing"
+                    sys.stdout.write(f" [{results.index(res) + 1}:NoBtn] ")
+            print("")
 
-                print(f"Attempting citation extraction ({citation_depth}, up to {citation_limit})...")
-                results = await bot.page.locator(".gs_r").all()
-                for idx, res in enumerate(results[:citation_limit]):
-                    try:
-                        cite_btn = (
-                            res.locator(".gs_or_cit")
-                            .or_(res.locator('a:has-text("인용")'))
-                            .or_(res.locator('a:has-text("Cite")'))
-                            .first
-                        )
-                        if await cite_btn.count() > 0 and await cite_btn.is_visible():
-                            await cite_btn.click()
-                            modal = bot.page.locator("#gs_cit")
-                            await modal.wait_for(state="visible", timeout=4000)
+            # 6. Save modified HTML containing the injected citations
+            modified_content = str(soup)
+            timestamp = datetime.now().strftime("%H%M%S")
+            filename = output_dir / f"scholar_result_{global_i}_{timestamp}.html"
+            filename.write_text(modified_content, encoding="utf-8")
+            captured_files.append((global_i, str(filename)))
+            print(f"Saved (Citations Injected): {filename}")
 
-                            cit_rows = bot.page.locator("#gs_citt .gs_citr")
-                            formatted_citations: list[str] = []
-                            for row_i in range(await cit_rows.count()):
-                                row_text = await cit_rows.nth(row_i).text_content()
-                                row_text = _clean_text(row_text)
-                                if row_text:
-                                    formatted_citations.append(row_text)
+            await asyncio.sleep(random.uniform(5, 10))
 
-                            cit_links = bot.page.locator("#gs_citi a")
-                            citation_links: list[dict[str, str]] = []
-                            for link_i in range(await cit_links.count()):
-                                link = cit_links.nth(link_i)
-                                label = _clean_text(await link.text_content())
-                                href = _clean_text(await link.get_attribute("href"))
-                                if label or href:
-                                    citation_links.append({"label": label, "url": href})
-
-                            citation_payload = {
-                                "formatted": formatted_citations,
-                                "links": citation_links,
-                            }
-                            # Scholar usually orders rows as MLA, APA, Chicago, Harvard, Vancouver.
-                            primary = formatted_citations[1] if len(formatted_citations) > 1 else (
-                                formatted_citations[0] if formatted_citations else ""
-                            )
-
-                            await bot.page.locator("#gs_cit-x").click(force=True)
-                            await modal.wait_for(state="hidden", timeout=3000)
-
-                            await res.evaluate(
-                                """(el, payload) => {
-                                    el.setAttribute("data-extracted-citation", payload.primary);
-                                    el.setAttribute("data-extracted-citation-json", payload.json);
-                                    el.setAttribute("data-citation-status", payload.status);
-                                }""",
-                                {
-                                    "primary": primary,
-                                    "json": json.dumps(citation_payload, ensure_ascii=False),
-                                    "status": "ok" if formatted_citations or citation_links else "empty",
-                                },
-                            )
-                            sys.stdout.write(f" [{idx + 1}:OK] ")
-                        else:
-                            await res.evaluate(
-                                """(el) => el.setAttribute("data-citation-status", "missing_button")"""
-                            )
-                            sys.stdout.write(f" [{idx + 1}:NoBtn] ")
-                    except Exception as e:
-                        try:
-                            await res.evaluate(
-                                """(el, status) => el.setAttribute("data-citation-status", status)""",
-                                f"error:{type(e).__name__}",
-                            )
-                        except Exception:
-                            pass
-                        sys.stdout.write(f" [{idx + 1}:Err] ")
-                        try:
-                            await bot.page.locator("#gs_cit-x").click()
-                        except Exception:
-                            pass
-                print("")
-
-                timestamp = datetime.now().strftime("%H%M%S")
-                filename = output_dir / f"scholar_result_{global_i}_{timestamp}.html"
-                content = await bot.page.content()
-                filename.write_text(content, encoding="utf-8")
-                captured_files.append((global_i, str(filename)))
-                print(f"Saved: {filename}")
-
-                await asyncio.sleep(random.uniform(5, 10))
-
-            except Exception as e:
-                print(f"Error Query {global_i}: {e}")
-
-    finally:
-        await bot.close()
+        except Exception as e:
+            print(f"Error Query {global_i}: {e}")
 
     return captured_files
 

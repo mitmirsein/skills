@@ -20,27 +20,28 @@ status: active
 # 🎓 Google Scholar Semantic (Browser) Recon Skill
 
 > **Identity**: 브라우저 기반 구글 스콜라 시맨틱 검색망 및 인지 엔진 (RISE Protocol)
-> **Core Tool**: `scripts/scholar_runner.py` -> `agents/stealth_browser.py`
+> **Core Tool**: `scripts/scholar_runner.py` -> `scripts/scholar_escalator.py` & `agents/stealth_browser.py`
 > **Target**: [Google Scholar Labs (Beta)](https://scholar.google.com/scholar_labs/search?hl=ko) / Google Scholar Web
-> **Engine**: Playwright browser helper for Labs interface / JSONL parser for `easy-review-system`
+> **Engine**: `insane-search` Phase 2 (curl_cffi) + `stealth-browser` Phase 3 (Playwright) hybrid scheduler
 
 ## 📌 개요 (Overview)
-`google-scholar-semantic` 스킬은 **Playwright CDP (Stealth Browser)**를 가동하여 실제 구글 스콜라 웹페이지를 탐색하고, 인간과 동일한 방식으로 데이터를 읽어 들이는 '시맨틱 정찰망'입니다.
-
-> **⚠️ 주의 (Semantic Scholar API와의 차이점)**:
-> 빠르고 규격화된 메타데이터(JSON/API) 추출이 필요할 때는 **`semantic-scholar` (시맨틱스콜라)** 스킬을 사용하십시오. 본 스킬은 사용자가 인증한 브라우저 세션에서 Google Scholar Labs 결과를 사람이 검토하듯 수집하고, 비정형 결과를 EvidencePack용 JSONL로 정리하는 데 특화되어 있습니다.
+`google-scholar-semantic` 스킬은 **insane-search v0.8.0**과 **Stealth Browser**를 결합하여, 구글의 삼엄한 봇 방화벽을 우회하고 로그인 쿠키 세션을 브릿징하여 초고속으로 학술 자료 및 BibTeX 인용을 정찰하는 고성능 하이브리드 시맨틱 수집망입니다.
 
 ## 🛠️ Operational Protocol (운용 규약)
 
 1.  **Target URL**: `https://scholar.google.com/scholar_labs` (AI-assisted results)
-2.  **Wait Protocol (40초 룰)**: 쿼리 실행 후 결과가 완전히 렌더링될 때까지 **최소 40초** 대기. (Labs 엔진의 심층 분석 결과를 모두 확보하기 위함)
-3.  **Deep Extraction (인용 정보 동시 추출)**: 
-    - 각 검색 결과 하단의 **'인용(Cite)'** 아이콘을 순차적으로 클릭.
-    - 팝업창에 나타나는 formatted citation rows 및 BibTeX/EndNote/RefMan/RefWorks 등 citation links를 추출하여 데이터셋에 병합.
+2.  **Hybrid Escalation Gate (하이브리드 에스컬레이션)**:
+    - 기본적으로 `insane-search` (curl_cffi TLS impersonation)를 사용해 초고속(1초 내외) 스크레이핑을 시도합니다.
+    - 만약 구글의 봇 방화벽(CAPTCHA) 또는 로그인 만료 리다이렉트가 감지되면 즉시 `stealth-browser` (Playwright)를 가동하여 로그인 상태의 세션을 띄우는 형태로 "무중단 핫 폴백(Hot Fallback)"을 수행합니다.
+3.  **Deep Extraction & BibTeX High-Pass (인용 정보 동시 추출)**: 
+    - 검색 결과에서 각 논문의 고유 식별자(`data-cid`)를 추출한 뒤, `insane-search` 비동기 세션을 통해 구글 스콜라의 BibTeX 내보내기 엔드포인트를 병렬로 직접 호출하여 인용 데이터를 수집합니다.
+    - 만약 다이렉트 Fetch 중 429 차단이 발생할 경우, 실패한 ID만 모아 `stealth-browser`가 이미 열려있는 탭을 통해 백그라운드 탭으로 로드하여 덤프하는 Fallback Pool을 가동합니다.
     - 기본값은 `--citation-depth all`이며, `--max-results`로 파싱할 각 레퍼런스에는 citation extraction을 시도해야 한다.
     - 검색 화면 스크랩 시 이 과정을 생략하는 것은 **불완전 정찰**로 간주함.
-4.  **Session Quota Control**: 한 브라우저 세션당 **최대 4개 쿼리**로 제한. 5개째부터는 반드시 브라우저 세션을 재시작하여 쿼터 잠금을 방지. Runner는 `--max-queries-per-session` 값을 4 이하로 강제한다.
-5.  **Output Integrity**: 수집된 데이터는 각 레퍼런스별 `citation`, `citation_variants`, `citation_links`, `citation_status`를 포함해야 하며, 최종 리포트의 참고문헌 SSOT로 사용함. JSONL 필드 정의는 [output-schema.md](./references/output-schema.md)를 따른다.
+4.  **Session Cookie Bridging (세션 쿠키 동적 브릿징)**:
+    - `stealth-browser`를 실행하여 획득한 세션 쿠키를 크롬 프로필 JSON 파일에 보존한 뒤 `insane-search` 세션에 동적으로 이식하여, 브라우저를 띄우지 않고도 로그인 전용인 구글 Labs 기능을 고속 curl로 호출할 수 있게 제어합니다.
+5.  **Session Quota Control**: 한 브라우저 세션당 **최대 4개 쿼리**로 제한. 5개째부터는 반드시 브라우저 세션을 재시작하여 쿼터 잠금을 방지. Runner는 `--max-queries-per-session` 값을 4 이하로 강제한다.
+6.  **Output Integrity**: 수집된 데이터는 각 레퍼런스별 `citation`, `citation_variants`, `citation_links`, `citation_status`를 포함해야 하며, 최종 리포트의 참고문헌 SSOT로 사용함. JSONL 필드 정의는 [output-schema.md](./references/output-schema.md)를 따른다.
 5a. **Dual-Summary Capture (자료당 2요약)**: Labs는 자료 하나에 **두 종류의 설명**을 반환한다 — ① AI 종합 산문(`summary_synthesis`), ② 라벨형 핵심 포인트(`key_points`, 측면명+설명). 파서가 이를 분리 수집하며, 리포트는 이를 쿼리별 **Aspect Index**(측면 빈도·커버리지)로 집계해 이후 분석(온톨로지·8축 검증)의 진입점으로 쓴다. **두 요약은 Google AI 생성물(`summary_provenance: google_ai_labs`)이므로 직접 인용 근거로 쓰지 말고 원문 확인 후 사용한다.**
 6.  **[Question-First Querying]**: Scholar Labs 쿼리는 키워드 나열이 아니라 완결된 자연어 문장으로 작성한다. 가능하면 의문문을 사용한다.
    - Bad: `LLM summary grounding evaluation`
@@ -50,7 +51,16 @@ status: active
 9.  **[JSONL Injection]**: Labs HTML 또는 비정형 텍스트는 `scholar_labs.jsonl`로 변환하여 `easy-review-system`의 EvidencePack에 주입한다.
 
 ## 2. Dynamic Workflow
+
 본 연구 전 **분석 함정(Gotchas)**과 **실행 옵션**을 먼저 점검합니다.
+
+### Phase 0.5: Architect Pre-phase (구글 스콜라 아키텍트 조율)
+본격 수집 단계 이전에 에이전트는 **"구글 스콜라 아키텍트 v1.0 with RISE"** 프로토콜로 사용자와 사전 대화를 진행합니다.
+1. 사용자가 학술 개념을 제시하면, 에이전트는 심층도 레벨(1, 2, 3)의 지정 여부를 확인합니다.
+2. 레벨이 지정되지 않은 경우 아래의 **심층 선택 메뉴(Depth Selector)**를 제시하고 입력을 받습니다.
+3. 선택된 레벨의 인지 엔진(PhD / PI / Professor)의 5대 차원 규약에 따라 다국어 확장 쿼리 쌍(Pair) 10개를 생성합니다.
+4. 각 쿼리는 신뢰도 태그(`[High]/[Medium]/[Low]`) 및 분야 적응 추천 검색처와 함께 출력 템플릿에 맞추어 표시합니다.
+5. 사용자가 쿼리를 승인하면, 에이전트는 해당 쿼리를 `queries.json` 또는 `QuerySet.json` 파일에 즉시 기록하고 출격(Phase 2)으로 인계합니다.
 
 ### Phase 0: Setup & Guardrail
 
