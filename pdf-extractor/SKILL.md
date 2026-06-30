@@ -6,7 +6,7 @@ description: >
   theological papers. Use when the user asks to extract or convert a PDF to
   Markdown; for argument-skeleton briefing on top of extraction use
   paper-xray. 키워드: PDF 추출, 마크다운 변환, 비전 OCR
-version: 2.1.1
+version: 2.2.0
 author: MS_Dev (Peppone)
 triggers:
   - "PDF 추출"
@@ -105,6 +105,17 @@ uv run python scripts/vision_to_json.py output/논문_images/
 
 ---
 
+## 🔗 엔진 정본 (SSOT)
+
+이 스킬은 추출 엔진 6스크립트(`preflight`·`extract_pdf`·`post_cleaner`·`healer`·`vision_*`)의 **정본(Single Source of Truth)**입니다. `paper-xray` 스킬이 동일 엔진의 검증된 미러를 보유하므로, **엔진 수정은 반드시 이 정본에서** 한 뒤 전파하십시오.
+
+```bash
+python3 scripts/sync_engine.py          # 미러(paper-xray)에 전파
+python3 scripts/sync_engine.py --check  # drift 검사만 (커밋/CI 전, 불일치 시 exit 1)
+```
+
+미러 무결성은 `paper-xray/tests/test_engine_parity.py`가 강제합니다(1바이트라도 어긋나면 FAIL).
+
 ## 🔧 의존성
 - 정본: MS_Dev 워크스페이스 `pyproject.toml` (`opendataloader-pdf`, `pypdf`).
   워크스페이스 내에서는 `uv run`이 자동 해석 — 별도 설치 불필요.
@@ -119,5 +130,6 @@ uv run python scripts/vision_to_json.py output/논문_images/
 - `scripts/healer.py`: 지능형 교정기 (v2.1, `--report` 감사)
 - `scripts/vision_extractor.py`: 비전 추출 컨트롤러 (마크다운 계약)
 - `scripts/vision_to_json.py`: 비전 시맨틱 JSON 골격 생성기
+- `scripts/sync_engine.py`: 엔진 정본 → 미러(paper-xray) 동기화기 (`--check`로 drift 검사)
 - `tests/test_healer.py`: healer 회귀·멱등·불변식 테스트 (`python3 -m unittest discover tests`)
 - `references/gotchas.md`: 함정·안티패턴 가이드

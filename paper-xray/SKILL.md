@@ -6,7 +6,7 @@ description: >
   (thesis, logical topology, combat map) within 5 minutes — designed for
   theological and humanities papers. Use when the user asks to extract,
   parse, or x-ray a paper PDF. 키워드: 논문 투시, PDF 추출, 논문 뼈대, 엑스레이
-version: 2.2.1
+version: 2.3.0
 author: MS_Dev (Peppone)
 triggers:
   - "PDF 추출"
@@ -31,6 +31,10 @@ capabilities:
   - battleground_target_identification
   - one_sentence_thesis_distillation
   - scan_honesty_uncertainty_flagging
+  - mechanical_qa_gate
+  - release_hygiene_guard
+  - untrusted_source_boundary
+  - engine_single_source_mirror
 scripts_path: "./scripts"
 status: active
 ---
@@ -55,6 +59,8 @@ status: active
 4. **지능형 교정 (Healing Pipeline)**: 문자 단위 괄호 스택 매칭, 고아 각주 분리 블록화, 깨진 모음/자음 파편 정리를 통해 텍스트 완성도를 끌어올립니다.
 5. **학술 삭제 감사 (Audit Report)**: 비가역적으로 제거되거나 재분류된 span을 보고서로 출력하여 학술 정보 손실을 사전에 예방합니다.
 6. **논증 역설계 (X-Ray 브리핑)**: 논문의 서론·결론·소제목 위상을 토대로 1문장 요약(1-Sentence Thesis), 논증 구조, 학술적 대립 전선(Combat Map), 분석자 인사이트를 도출합니다.
+7. **기계 검수 게이트 (Mechanical QA)**: 산출된 브리핑을 파싱해 유령 페이지 인용·미완성 흔적·섹션 누락을 `FAIL`로 차단하고, 정본 미확인 서지(제1조)·영혼 없는 찬사(제5조)를 `WARN`으로 띄워 독해 헌법을 기계로 강제합니다.
+8. **공개 위생 게이트 (Release Guard)**: 외부 공유 전 공개 가능 산출물(`_xray.md`)만 화이트리스트로 분류하고, 원전 verbatim 누출을 `BLOCK`으로 차단합니다(제6조).
 
 ---
 
@@ -64,7 +70,7 @@ status: active
 
 | 입력 포맷 | 단계별 처리 경로 | 설명 |
 | :--- | :--- | :--- |
-| **PDF** | `[1단계 Triage]` ➡️ `[2단계 Extraction]` ➡️ `[3단계 Healing]` ➡️ `[4단계 X-Ray]` | 표준 4단계 전체 프로세스를 따르며, 최종 브리핑 파일도 생성합니다. |
+| **PDF** | `[1단계 Triage]` ➡️ `[2단계 Extraction]` ➡️ `[3단계 Healing]` ➡️ `[4단계 X-Ray]` ➡️ `[5단계 QA]` | 표준 프로세스 전체. 브리핑 저장 후 QA 게이트 필수. 외부 공유 시 `[6단계 공개점검]` 추가. |
 | **DOCX** | `[Pandoc/CLI 변환]` ➡️ `[4단계 X-Ray]` | `.md` 확보 후 곧바로 4단계로 진입하며, **최종 브리핑 결과물을 `{논문명}_xray.md`로 물리 저장**합니다. |
 | **MD / TXT** | `[4단계 X-Ray]` (즉시 분석 ➡️ 파일 저장) | 1~3단계를 생략하고 즉시 4단계 분석을 가동하며, **최종 브리핑 결과물을 `{논문명}_xray.md`로 물리 저장**합니다. |
 
@@ -76,6 +82,7 @@ status: active
 
 ### 0단계: 진입 전 준비
 - 워크스페이스 내에서는 `uv run`이 의존성을 자동 처리합니다. 워크스페이스 외부의 경우, `pip install -r requirements.txt`로 의존성을 먼저 설정하십시오.
+- **엔진 정본 주의 (SSOT):** 추출 엔진 6스크립트(`preflight`·`extract_pdf`·`post_cleaner`·`healer`·`vision_*`)의 정본은 형제 스킬 **`pdf-extractor`**입니다. paper-xray는 검증된 미러를 보유합니다. 엔진을 고칠 일이 있으면 **반드시 정본에서 수정한 뒤** `pdf-extractor/scripts/sync_engine.py`로 전파하십시오. 미러 무결성은 `tests/test_engine_parity.py`가 강제합니다(불일치 시 FAIL).
 
 ### [1단계] 사전 진단 (Pre-flight Triage)
 추출 전 PDF 파일의 첫 3페이지를 초고속 진단하여 최적의 파싱 경로를 결정합니다.
@@ -116,3 +123,20 @@ uv run python scripts/healer.py output/<논문명>/<논문명>_paged_cleaned.md 
 
 ### [4단계] X-Ray 분석 및 브리핑 (최종 아웃풋)
 정제 완료된 `{논문}_paged_healed.md` 문서를 바탕으로, 전체를 정독하지 않고도 논문의 핵심 뼈대를 볼 수 있는 **X-Ray 브리핑**을 최종 출력하고 파일로 저장합니다. 핵심 주장과 전선도 항목에는 가능한 한 보존된 페이지 마커를 근거로 붙입니다.
+
+### [5단계] 기계 검수 게이트 (Mechanical QA) — 필수
+브리핑을 `{논문명}_xray.md`로 저장한 뒤, constitution의 독해 헌법을 기계적으로 강제하는 QA 게이트를 통과시킵니다.
+```bash
+uv run python scripts/xray_qa.py output/<논문명>/<논문명>_xray.md --source output/<논문명>/<논문명>_paged_healed.md
+```
+- **유령 페이지**(정본 마커 밖 인용)·**미완성 흔적**(TODO·빈 섹션·템플릿 잔재)·**섹션 누락**은 `FAIL`(exit 1)로 차단됩니다. 수정 후 재실행하십시오.
+- **정본 미확인 연도**(제1조 위반 의심)·**영혼 없는 찬사**(제5조)는 `WARN`으로 표기되며 검토가 필요합니다.
+- `--source`로 정본을 함께 주면 페이지 마커 교차검증이 활성화됩니다(강력 권장). 정본 없이 돌리면 페이지 검증은 `WARN`으로 건너뜁니다.
+
+### [6단계] 공개 전 위생 점검 (Release Guard) — 외부 공유 시
+저작권 있는 원전의 추출 전문이 작업 폴더에 평문으로 남으므로, 외부 공유·발행 전 반드시 점검합니다.
+```bash
+uv run python scripts/release_guard.py output/<논문명>/
+```
+- 공개 가능 화이트리스트는 `_xray.md`(분석 산출물)와 자작 도식(`assets/`)뿐입니다. 원전 파생물(`_paged*.md`·`.json`·렌더 이미지)은 **공개 금지**입니다.
+- `_xray.md`에 원전 장문이 verbatim으로 복제되면 `BLOCK`(exit 2)됩니다 (제6조 4항).

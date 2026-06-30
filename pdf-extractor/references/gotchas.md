@@ -58,4 +58,16 @@ uv run python scripts/extract_pdf.py --input paper.pdf --hybrid
 - 미등록 문서는 `temp/pre_chunk_config.json`에 수동 메타데이터 입력 필요
 
 ---
+
+## 7. 한글 PDF 추출기 선택 (pypdf 자간 분해 함정)
+
+한글 학술 PDF는 추출기에 따라 텍스트 품질이 크게 갈린다.
+
+- **pypdf**: 한글 자간을 공백으로 분해(`오 늘 날`) → 띄어쓰기 소실, 사실상 복구 불가
+- **poppler `pdftotext -layout`**: 한글 띄어쓰기를 정상 보존. ★권장
+- **opendataloader**: Intel Mac에서 PyTorch 충돌(§2), 미설치도 흔함
+
+`extract_pdf.py`는 opendataloader 부재/실패 시 **자동으로 poppler 폴백**한다(별도 조치 불필요). `preflight.py`가 한글 글자단위 분리를 감지하면 `route_code: CORE` + `extractor_hint: poppler`를 반환하므로, 그때는 poppler 경로로 추출하면 된다.
+
+---
 *Created by MS_Dev (2026-04-17)*

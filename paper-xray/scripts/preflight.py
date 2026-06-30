@@ -55,6 +55,9 @@ def analyze_pdf(file_path):
         
         # 패턴 2: 외래어 자음 분리 (예: v o n, G o t t - 공백 문자가 연속된 철자들)
         spaced_chars = len(re.findall(r'[a-zA-Z] [a-zA-Z] [a-zA-Z]', extracted_text))
+
+        # 패턴 3: 한글 글자단위 분리 (예: "오 늘 날" — pypdf가 한글 자간을 공백으로 분해)
+        korean_spaced = len(re.findall(r'[가-힣] [가-힣] [가-힣]', extracted_text))
         
         noise_score = orphan_brackets + (spaced_chars * 2)
         
@@ -66,9 +69,25 @@ def analyze_pdf(file_path):
             "total_chars": total_chars,
             "orphan_brackets": orphan_brackets,
             "spaced_chars": spaced_chars,
+            "korean_spaced": korean_spaced,
             "noise_score": noise_score,
             "noise_threshold": 15,
+            "korean_spaced_threshold": 10,
         }
+
+        # 한글 글자단위 분리: 텍스트 레이어는 있으나 pypdf가 자간을 분해한 상태.
+        # VISION(이미지 OCR)이 아니라 poppler(pdftotext -layout) 재추출이 정답이다.
+        if korean_spaced > 10:
+            return {
+                "route": "CORE (poppler 권장)",
+                "route_code": "CORE",
+                "reason": f"한글 글자단위 분리 노이즈 감지 (count: {korean_spaced}). "
+                          f"pypdf 텍스트 레이어가 한글 자간을 공백으로 분해하고 있습니다.",
+                "action": "extract_pdf.py의 poppler(pdftotext -layout) 폴백으로 추출하십시오. "
+                          "opendataloader/pypdf보다 한글 띄어쓰기를 정확히 보존합니다.",
+                "metrics": metrics,
+                "extractor_hint": "poppler",
+            }
 
         if noise_score > 15:
             return {
