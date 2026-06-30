@@ -159,11 +159,12 @@ def check_card(text: str, source_text: str | None) -> CheckResult:
 
 def fix_markdown_emphasis(text: str) -> tuple[str, int]:
     """
-    닫는 강조 기호(**) 바로 뒤에 한글 조사나 영문자가 붙어 있어 
-    마크다운 렌더링이 깨지는 현상을 Zero-Width Space(U+200B) 삽입을 통해 자동 보정합니다.
+    강조 기호(**) 바로 뒤에 한글 조사나 영문자가 붙어 있어 
+    마크다운 렌더링이 깨지는 현상(여는 볼드 뒤 내용 밀착, 닫는 볼드 뒤 조사 밀착)을
+    Zero-Width Space(U+200B) 삽입을 통해 자동 보정합니다.
     """
-    pattern = r'\*\*([^*]+?)\*\*([가-힣a-zA-Z])'
-    new_text, count = re.subn(pattern, r'**\1**' + '\u200b' + r'\2', text)
+    pattern = r'\*\*(?!\u200b)([가-힣a-zA-Z])'
+    new_text, count = re.subn(pattern, r'**' + '\u200b' + r'\1', text)
     return new_text, count
 
 
