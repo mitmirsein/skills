@@ -9,7 +9,7 @@ import subprocess
 PAGE_MARKER = "===== p.{n} ====="
 
 
-def _write_page_marked_markdown(output_dir, base_name):
+def _write_page_marked_markdown(output_dir, base_name, start_page=1):
     """Build citation-safe Markdown from opendataloader JSON page metadata."""
     json_path = os.path.join(output_dir, f"{base_name}.json")
     if not os.path.exists(json_path):
@@ -43,7 +43,7 @@ def _write_page_marked_markdown(output_dir, base_name):
         "<!-- page-marked Markdown; cite with preserved page markers. -->",
         "",
     ]
-    for i, parts in enumerate(pages, 1):
+    for i, parts in enumerate(pages, start_page):
         lines.append(PAGE_MARKER.format(n=i))
         lines.append("")
         if parts:
@@ -55,7 +55,7 @@ def _write_page_marked_markdown(output_dir, base_name):
     return marked_path
 
 
-def _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time):
+def _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time, start_page=1):
     """opendataloader 부재/실패 시 poppler(pdftotext -layout)로 폴백 추출.
 
     한글 논문에서 pypdf의 자간 분해 문제를 피하고 띄어쓰기를 보존한다.
@@ -79,7 +79,7 @@ def _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, s
         while pages and not pages[-1].strip():
             pages.pop()
         lines = ["<!-- page-marked Markdown; cite with preserved page markers. -->", ""]
-        for i, page_text in enumerate(pages, 1):
+        for i, page_text in enumerate(pages, start_page):
             lines.append(PAGE_MARKER.format(n=i))
             lines.append("")
             lines.append(page_text.strip())
@@ -104,7 +104,7 @@ def _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, s
     return md_path
 
 
-def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False):
+def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False, start_page=1):
     """
     opendataloader-pdf 엔진으로 PDF를 마크다운으로 변환합니다.
 
@@ -117,6 +117,7 @@ def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False)
         output_dir (str): 출력 디렉토리 경로
         page_markers (bool): True이면 JSON의 page number를 사용해
             `===== p.N =====` 마커가 박힌 Markdown을 별도 생성.
+        start_page (int): 실제 논문 인쇄 시작 페이지 번호.
     """
     if not os.path.exists(pdf_path):
         print(f"❌ Error: PDF not found at {pdf_path}")
@@ -131,7 +132,7 @@ def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False)
 
     # 모드 선택
     mode_str = "docling-fast" if hybrid else "off"
-    print(f"🚀 opendataloader: Processing {filename} (Mode: {mode_str}) → Folder: {target_output_dir}...")
+    print(f"🚀 opendataloader: Processing {filename} (Mode: {mode_str}, Start Page: {start_page}) → Folder: {target_output_dir}...")
 
     start_time = time.time()
 
@@ -140,7 +141,7 @@ def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False)
         import opendataloader_pdf
     except ImportError:
         print("⚠️ opendataloader-pdf 미설치 → poppler(pdftotext -layout) 폴백으로 전환합니다.")
-        return _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time)
+        return _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time, start_page)
 
     try:
         # JSON + Markdown 동시 생성
@@ -158,7 +159,7 @@ def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False)
         expected_md = os.path.join(target_output_dir, f"{base_name}.md")
 
         if page_markers:
-            marked_md = _write_page_marked_markdown(target_output_dir, base_name)
+            marked_md = _write_page_marked_markdown(target_output_dir, base_name, start_page)
             if marked_md:
                 duration = time.time() - start_time
                 print(f"✅ 성공! 페이지 마커 파일: {marked_md} ({duration:.2f}s)")
@@ -185,7 +186,7 @@ def extract_pdf(pdf_path, hybrid=False, output_dir="output", page_markers=False)
         if "Hybrid server" in str(e):
             print("💡 Tip: 별도 터미널에서 'uv run opendataloader-pdf-hybrid' 를 먼저 실행하세요.")
         print("⚠️ poppler(pdftotext -layout) 폴백을 시도합니다.")
-        return _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time)
+        return _extract_via_poppler(pdf_path, target_output_dir, base_name, page_markers, start_time, start_page)
 
 
 def main():
@@ -209,6 +210,10 @@ def main():
         "--page-markers", action="store_true",
         help="JSON page number 기반 `===== p.N =====` 마커 포함 Markdown 생성"
     )
+    parser.add_argument(
+        "--start-page", type=int, default=1,
+        help="실제 논문 인쇄 시작 페이지 번호 (기본값: 1)"
+    )
     parser.add_argument("--output", "-o", default="output", help="출력 디렉토리 (기본: output/)")
 
     args = parser.parse_args()
@@ -217,6 +222,7 @@ def main():
         hybrid=args.hybrid,
         output_dir=args.output,
         page_markers=args.page_markers,
+        start_page=args.start_page,
     )
 
     if result:
