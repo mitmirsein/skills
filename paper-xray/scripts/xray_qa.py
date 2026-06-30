@@ -157,6 +157,16 @@ def check_card(text: str, source_text: str | None) -> CheckResult:
     return CheckResult(hard=hard, warn=warn)
 
 
+def fix_markdown_emphasis(text: str) -> tuple[str, int]:
+    """
+    닫는 강조 기호(**) 바로 뒤에 한글 조사나 영문자가 붙어 있어 
+    마크다운 렌더링이 깨지는 현상을 Zero-Width Space(U+200B) 삽입을 통해 자동 보정합니다.
+    """
+    pattern = r'\*\*([^*]+?)\*\*([가-힣a-zA-Z])'
+    new_text, count = re.subn(pattern, r'**\1**' + '\u200b' + r'\2', text)
+    return new_text, count
+
+
 def parse_args(argv: list[str]) -> tuple[Path, Path | None]:
     parser = argparse.ArgumentParser(description="X-Ray 브리핑 기계 검수 게이트")
     parser.add_argument("card", help="검수할 {논문}_xray.md 경로")
@@ -174,6 +184,14 @@ def main(argv: list[str]) -> int:
         print(f"FAIL  H0 브리핑 파일 없음: {card_path}")
         return 1
     text = card_path.read_text(encoding="utf-8")
+    
+    # 마크다운 강조 렌더링 린트 및 자동 보정 (U+200B 삽입)
+    fixed_text, fix_count = fix_markdown_emphasis(text)
+    if fix_count > 0:
+        card_path.write_text(fixed_text, encoding="utf-8")
+        print(f"FIX   마크다운 볼드 강조 렌더링 깨짐 자동 보정 완료 ({fix_count}곳 U+200B 삽입)")
+        text = fixed_text
+
     source_text: str | None = None
     if source_path is not None:
         if not source_path.exists():
