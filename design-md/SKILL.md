@@ -2,56 +2,91 @@
 name: design-md
 description: >
   Designs and renders UI/UX from a single source of truth (design.md SSOT)
-  — spec first, then consistent rendering. Use when the user asks to
-  design a UI, create a screen spec, or keep design docs and rendered
-  output in sync. 키워드: UI 설계, 디자인 SSOT, 화면 명세
-version: 4.1.2
-codename: ARC v4.1 Standard
+  by composing focused design operations — route intent, load brand canon
+  and OKLCH tokens, run verb-passes, then score the result. Use when the
+  user asks to design a UI, render a screen, polish or redesign an existing
+  interface, or typeset editorial/print output.
+  키워드: UI 설계, 디자인 SSOT, 화면 명세, 다듬어줘, 인쇄 조판, 프리미엄 스타일
+version: 5.0.0
+codename: ARC v5 Composable Oracle
 author: MS_Dev
 triggers:
   - "UI 만들어줘"
   - "세련된 스타일 적용해줘"
+  - "다듬어줘 / polish"
+  - "이 화면 개선해줘"
+  - "인쇄용으로 조판해줘"
   - "#ui"
   - "#스타일"
-  - "디자인해줘"
   - "make it look premium"
 capabilities:
+  - intent_routing_to_design_operations
   - design_system_ssot_parsing
-  - premium_ui_ux_rendering
-  - visual_brand_consistency_enforcement
-  - frontend_component_engineering
+  - oklch_token_system
+  - composable_premium_ui_ux_rendering
+  - editorial_print_grade_typesetting
+  - scored_design_critique
 references_path: "./references"
 status: active
 ---
 
-# 🎨 Design-MD (v4.1)
+# 🎨 Design-MD (v5 · Composable Oracle)
 
-## 1. Overview
-SSOT(단일 진실 공급원) 기반의 통합 UI/UX 설계 및 렌더링 스킬입니다. 모든 시각적 구현 전에 반드시 **[디자인 오라클(DESIGN.md)]**을 호출하여 영감을 얻고 정확한 CSS 토큰으로 무장합니다.
+브랜드 정전(canon)과 OKLCH 토큰을 진실 공급원으로 삼아, **작은 디자인 동사(operation)들을 의도에 맞게 합성**하여 렌더링하고 점수로 검수하는 스킬. 절대 "상상해서" 디자인하지 않는다.
 
-## 2. Dynamic Workflow
-모든 렌더링 작업은 다음 4단계를 거쳐 수행됩니다. 절대 "상상해서" 디자인하지 마십시오.
+v4의 일괄 1패스를 버리고, 재호출·부분개선이 가능한 **동사 파이프라인**으로 전환했다. 모든 동사는 워크스페이스 전역(UI/문서/인쇄/Obsidian)에서 상시 사용 가능하다.
 
-### Phase 1: Oracle (디자인 토큰 수신)
-- 모든 컴포넌트는 `references/` 내의 정전(Canon)을 우선 참조하여 스타일링한다.
-- **Korean Typography Strategy**: 
-  - **Sans-Serif (UI/Modern)**: 투박한 Noto Sans KR 대신, 영문(Inter/SF Pro)과 베이스라인이 완벽히 일치하는 **`Pretendard`**를 유일한 기본 폰트로 강제한다.
-  - **Serif (Editorial)**: 학술/목회(Kerygma) 콘텐츠 렌더링 시 **`Noto Serif KR`** 또는 **`KoPubBatang`**을 사용하여 인쇄물 수준의 격조를 확보한다.
-  - **Micro-Typography**: 한글 텍스트 렌더링 시 반드시 `word-break: keep-all;`을 적용하고, 자간(`letter-spacing`)은 `-0.01em` ~ `-0.02em`으로 미세하게 조여 시각적 밀도를 높인다.
-- `./references/design-systems/` 내에서 타겟 브랜드의 마크다운(.md) 문서를 로드합니다.
-- 브랜드의 무드(Mood), 색상(Hex), 폰트(Typography) 스펙을 메모리에 적재합니다.
+## Phase 0 — 가드레일
 
-### Phase 2: Blueprint (프롬프트 구성)
-- `DESIGN.md` 내에 기재된 'Agent Prompt Guide'를 기반으로, 어떤 태그에 어떤 클래스와 로직을 적용할지 청사진을 완성합니다.
+- 모든 렌더링 전 [references/gotchas.md](./references/gotchas.md)를 읽고 양산형(Generic) 함정·접근성·모션 안티패턴을 확인한다.
+- 한글이 등장하면 [typeset](./references/operations/typeset.md)의 타이포 규칙(Pretendard / Noto Serif KR, `word-break: keep-all`)이 **무조건** 적용된다.
 
-### Phase 3: Execute (렌더링)
-- HTML, React, SVG 등 지정된 포맷으로 코드를 생성합니다. 
-- 스타일 주입은 반드시 추출된 CSS 토큰(Var 또는 구체적 Hex)에 의존해야 합니다.
-- **Responsive-First**: 모든 결과물은 반드시 반응형(Mobile-First/Fluid) 설계를 포함해야 합니다. (Media Queries 및 Viewport Meta 태그 필수)
+## Phase 1 — Route (의도→동사 체인 선택)
 
-### Phase 4: QA (무자비한 심사)
-- [gotchas.md](./references/gotchas.md)를 점검하여, 금지된 촌스러운 색상(Generic colors)이 쓰이지 않았는지, 위계(Hierarchy)가 깨지지 않았는지 최종 검수합니다.
-- **Breakpoints Check**: 다양한 화면 크기(Mobile, Tablet, Desktop)에서 레이아웃이 무너지지 않는지 시각적으로 추론하여 검증합니다.
+사용자 의도를 분류하고, 아래 기본 체인 중 하나를 고른 뒤 불필요한 동사는 건너뛴다. 각 동사 파일은 **그 단계를 실행할 때만** 읽는다(progressive disclosure).
+
+| 의도 | 기본 동사 체인 |
+|---|---|
+| 새 화면/컴포넌트 생성 | shape → layout → typeset → colorize → animate → harden → critique |
+| 다듬기/마감 (polish) | critique → (layout·typeset·colorize 중 지적된 것) → critique |
+| 기존 UI 개선 (redesign) | critique → 타겟 동사 → harden → critique |
+| 에디토리얼·설교·저널 인쇄 | shape → typeset → print-grade → critique |
+| 색/팔레트 작업 | colorize (→ oklch-base 토큰) |
+| 반응형/멀티타깃 | adapt |
+
+동사 카탈로그 (`references/operations/`):
+- [shape.md](./references/operations/shape.md) — 코드 전 설계 인터뷰 → 디자인 브리프
+- [layout.md](./references/operations/layout.md) — 8px 그리드·리듬·여백·위계
+- [typeset.md](./references/operations/typeset.md) — 한·영 타이포 시스템, 측정폭, 마이크로 타이포
+- [colorize.md](./references/operations/colorize.md) — 브랜드 색 → OKLCH 팔레트 적용
+- [animate.md](./references/operations/animate.md) — 모션 12원칙 요약 + compositor-safe 규칙
+- [harden.md](./references/operations/harden.md) — empty/error/loading/긴 한글/i18n/edge
+- [adapt.md](./references/operations/adapt.md) — 반응형·인쇄·Obsidian-native 출력 타깃
+- [print-grade.md](./references/operations/print-grade.md) — 인쇄급 조판(@page·금칙·각주·성구)
+- [critique.md](./references/operations/critique.md) — 0–100 점수 루브릭 + 페르소나 + 신학적 긴장 체크
+
+## Phase 2 — Oracle (정전·토큰 적재)
+
+- `references/design-systems/`에서 타겟 브랜드 `.md`를 로드해 무드·색·폰트 스펙을 적재한다. (예: apple, toss, stripe, linear, notion, Claude_Editorial, Academic_Minimalist, sermon-framework …)
+- 색은 hex로 끝내지 말고 [references/tokens/oklch-base.md](./references/tokens/oklch-base.md)로 OKLCH 토큰화하여 라이트/다크·대비·계절(전례) 변주를 파생한다.
+- 브랜드 미지정 시: 콘텐츠 성격으로 추정(SaaS→linear/stripe, 에디토리얼/신학→Claude_Editorial/Academic_Minimalist)하고 사용자에게 한 줄로 확인한다.
+
+## Phase 3 — Compose (동사 순차 실행)
+
+1. 선택한 체인을 순서대로 실행한다. 각 동사 파일을 그 시점에 읽고 규칙을 적용한다.
+2. 스타일 주입은 **추출된 OKLCH 토큰(var)** 에 의존한다. 임의 hex·원색 금지(gotchas §1).
+3. 출력 포맷(HTML/React/SVG/Obsidian)은 [adapt.md](./references/operations/adapt.md)가 정한 타깃 규약을 따른다. 모든 화면 출력은 Mobile-First 반응형 필수.
+
+## Phase 4 — Critique (무자비한 점수 심사)
+
+- [critique.md](./references/operations/critique.md)의 루브릭으로 0–100 점수화하고, 70점 미만 항목은 해당 동사로 되돌아가 1회 이상 보정한다.
+- gotchas.md 전 항목 + 접근성(대비·포커스·키보드) 통과 여부를 명시한다.
+- **신학/에디토리얼 콘텐츠**: 대립·아포리아가 시각 위계에서 단일 결론으로 평탄화되지 않았는지 반드시 점검(워크스페이스 헌법 직결).
+
+## 검증·보고
+
+- 보고 시: 선택한 동사 체인, 적용 브랜드 canon, critique 총점과 미달 항목, 사용한 OKLCH 토큰을 명시한다.
+- 실제로 렌더 결과를 추론·검수하지 않았다면 그렇다고 정직하게 말한다. 임의 가정으로 통과 처리 금지.
 
 ---
 *Commanded by Peppone, MS_Brain.nosync Chief of Staff*

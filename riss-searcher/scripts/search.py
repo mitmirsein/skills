@@ -219,8 +219,9 @@ class RissScraper:
         return {"control_no": control_no, "abstract": "상세 정보를 불러올 수 없습니다.", "metadata": {}}
 
     def _parse_detail(self, soup: BeautifulSoup, control_no: str) -> dict:
+        # div.textWrap, div.text.off, div.abstractFull 등 다양한 태그 탐색
         abstract_tags = soup.select(
-            "div.abstractFull, div.abstract_box, #abstract, .abstract_txt"
+            "div.abstractFull, div.abstract_box, #abstract, .abstract_txt, div.textWrap, div.text.off"
         )
         abstract = ""
         for tag in abstract_tags:
@@ -232,15 +233,17 @@ class RissScraper:
             abstract = "초록 정보가 제공되지 않습니다."
 
         metadata = {}
-        info_table = soup.select_one("div.inner_info_table, .info_txt, .detail_info")
+        info_table = soup.select_one("div.infoDetail, div.infoDetailL, div.inner_info_table, .info_txt, .detail_info")
         if info_table:
             for row in info_table.select("li, tr"):
-                th = row.select_one("th, span.th, dt")
-                td = row.select_one("td, span.td, dd")
+                th = row.select_one("span.strong, th, span.th, dt")
+                td = row.select_one("div, td, span.td, dd")
                 if th and td:
                     key = th.get_text(strip=True)
-                    val = td.get_text(strip=True)
+                    val = td.get_text(separator=" ", strip=True)
                     if key and val:
+                        # 불필요한 연속 공백 제거
+                        val = " ".join(val.split())
                         metadata[key] = val
 
         return {

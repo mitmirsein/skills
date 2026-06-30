@@ -1,6 +1,6 @@
 # .skills 스킬 인덱스 (INDEX)
 
-갱신: 2026-06-12 / `python3 _meta/validate.py --index`로 재생성
+갱신: 2026-06-18 / `python3 _meta/validate.py --index`로 재생성
 
 gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인덱스에서 제외.
 
@@ -90,7 +90,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | batch-operator | active | A | Runs large-scale parallel file processing and bulk code migrations (a /batch-style operato… |
 | btw | active | A | Handles quick side questions without polluting the main task context — answers briefly, th… |
 | continuous-learner | active | A | Learns durable user preferences from session behavior — scaffolding questions, discovery o… |
-| design-md | active | A | Designs and renders UI/UX from a single source of truth (design.md SSOT) — spec first, the… |
+| design-md | active | A | Designs and renders UI/UX from a single source of truth (design.md SSOT) by composing focu… |
 | dictionary-editor | active | A | Writes encyclopedic theological dictionary articles — multilingual lemma standards (EN/DE/… |
 | grafeo-connector | active | A | Connects the msn_th_db corpus and TOSK ontology for fused search — BM25 text axis with chu… |
 | mole-manager | active | A | Automates macOS diagnostics, cleanup, optimization, and monitoring with the Mole CLI (tw93… |

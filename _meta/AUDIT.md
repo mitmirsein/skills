@@ -1,6 +1,6 @@
 # .skills 감사 결과 (AUDIT)
 
-생성: 2026-06-12 / 검사 대상: 84개 (gws, _template 제외) / 도구: `_meta/validate.py`
+생성: 2026-06-18 / 검사 대상: 84개 (gws, _template 제외) / 도구: `_meta/validate.py`
 
 ## 등급 분포
 
@@ -26,7 +26,7 @@
 | create-slide-from-markdown | A | media | 146 | — |
 | create-slide-image-prompts | A | media | 101 | — |
 | crossref-journal-searcher | A | academic-search | 42 | — |
-| design-md | A | utilities | 57 | — |
+| design-md | A | utilities | 92 | — |
 | dictionary-editor | A | utilities | 49 | — |
 | digital-curator | A | vault | 57 | — |
 | eng-student-consultant | A | writing | 80 | — |
