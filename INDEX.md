@@ -1,6 +1,6 @@
 # .skills 스킬 인덱스 (INDEX)
 
-갱신: 2026-06-18 / `python3 _meta/validate.py --index`로 재생성
+갱신: 2026-07-05 / `python3 _meta/validate.py --index`로 재생성
 
 gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인덱스에서 제외.
 
@@ -31,7 +31,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | code-simplifier | active | A | Simplifies code — token diet, complexity reduction, and abstraction flattening while prese… |
 | git-workflow | active | A | Standardized Git workflow — Conventional Commits, branch strategy, and pull-request flow. … |
 | github-ops | active | A | Automates GitHub operations via the gh CLI — repo creation, remote wiring, issues, and PRs… |
-| insane-search | active | A | Auto-bypass for blocked websites — tries every method until one works. Use when WebFetch r… |
+| insane-search | active | C | Adaptive access for blocked websites — tries every method until one works. Use when WebFet… |
 | langgraph-supervisor | active | A | Orchestrates large multi-step jobs as a Supervisor-Worker state machine — plan, delegate t… |
 | lightpanda-recon | active | A | Headless browser recon via the Lightpanda binary — faster and lighter than Playwright for … |
 | log-miner | active | A | Mines unstructured conversation logs (.logs/) for reusable knowledge — flash ideas, code s… |
@@ -43,7 +43,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | tech-strategist | active | A | Reframes a request to find the "10-star product" hidden inside it, scouts repos/landscape,… |
 | tech-tdd | active | A | Drives development through the Red-Green-Refactor cycle — acceptance criteria first, faili… |
 
-## media (12)
+## media (11)
 
 | 스킬 | 상태 | 등급 | 설명 |
 |---|---|---|---|
@@ -51,7 +51,6 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | create-slide-from-markdown | active | A | Generates an open-slide deck from a Markdown or Obsidian note — handles frontmatter, headi… |
 | create-slide-image-prompts | active | A | Builds image-generation prompts for Master Of Slide decks from a distilled GPT Image 2 che… |
 | epub-bindery | active | A | Compiles Markdown files into a publication-grade EPUB ebook via pandoc — chapters, metadat… |
-| hwp-converter | active | A | Converts HWP/HWPX (Korean word processor) documents to Markdown on both macOS and Windows,… |
 | lecture-video-generator | active | A | Orchestrates the existing lecture_video_generator project pipeline to turn a theology lect… |
 | media-factory | active | A | Creative studio — generates high-quality AI images ("holy aesthetic" presets) and converts… |
 | pdf-extractor | active | A | Extracts PDFs to high-fidelity Markdown using structural hybrid engines, elite Vision-base… |
@@ -82,6 +81,16 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | theology-scholar | active | A | Top-tier theological research engine ('Cathedral') — primary-text analysis (PAF), hypothes… |
 | theology-terminology-linter | active | A | Lints a document for inconsistent Korean renderings of the same theological term (equivoca… |
 | theology-translator | active | A | Translates theological texts (DE/EN → KO) through an orchestrator-led, role-isolated team … |
+
+## uncategorized (5)
+
+| 스킬 | 상태 | 등급 | 설명 |
+|---|---|---|---|
+| gn-voice | — | B | AI가 쓴 한국어 글을 저자 본인 문체로 재작성하는 개인 전용 윤문 스킬. 코퍼스 144건(threads+답글+브런치)에서 증류한 장르 팩(chat/reply/e… |
+| hwp-pages-convert | active | B | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
+| sobeom-illustrations | active | B | Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create … |
+| theology-evidence-writing | active | A | Use when writing theology notes, doing biblical exegesis, or building a theological claim … |
+| theology-handoff | active | A | Use when a research or writing session is ending, context is about to be compacted, or a l… |
 
 ## utilities (11)
 

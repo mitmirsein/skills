@@ -1,5 +1,7 @@
 ---
 name: insane-search
+version: 1.0.0
+status: active
 description: >
   Adaptive access for blocked websites — tries every method until one works.
   Use when WebFetch returns 402/403/blocked, or when accessing X/Twitter, Reddit,

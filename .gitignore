@@ -21,3 +21,6 @@ _meta/audit.json
 **/history.log
 **/results/*.log
 .vscode/
+
+# 로더 노출용 로컬 심링크(프로젝트는 projects/에 정본) — 머신별 재생성
+gn-voice
