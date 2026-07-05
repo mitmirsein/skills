@@ -7,7 +7,7 @@ description: >
   without loss.
   키워드: 연구 세션 인계, scholar handoff, 세션 핸드오프, 연구 인계, 컨텍스트 압축, 아포리아 이월
 version: 1.1.0
-author: MS_Dev (Peppone)
+author: MS_Dev
 triggers:
   - "연구 세션 인계"
   - "scholar handoff"

@@ -9,7 +9,7 @@ description: >
   키워드: 그라페오, 융합 검색, 관계 추론, 지식 그래프 검색
 version: 1.1.0
 codename: Third Gen
-author: Peppone (빼뽀네)
+author: MS_Dev
 triggers:
   - "grafeo sync"
   - "grafeo search [query]"
@@ -63,4 +63,4 @@ status: active
 - **G3 (Provenance)**: 모든 검색 결과에 `msn_th_db`의 원본 좌표(printed_page, global_chunk_id) 유지.
 
 ---
-*Created by Peppone, MS_Dev Third Gen Standard*
+*Created by MS_Dev, Third Gen Standard*

@@ -89,4 +89,4 @@ v4의 일괄 1패스를 버리고, 재호출·부분개선이 가능한 **동사
 - 실제로 렌더 결과를 추론·검수하지 않았다면 그렇다고 정직하게 말한다. 임의 가정으로 통과 처리 금지.
 
 ---
-*Commanded by Peppone, MS_Brain.nosync Chief of Staff*
+*Commanded by MS_Dev*

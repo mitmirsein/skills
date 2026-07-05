@@ -8,7 +8,7 @@ description: >
   키워드: 바르트, KD 읽기, 교의학 번역
 version: 2.1.1
 codename: Fidelity Gate
-author: Peppone
+author: MS_Dev
 triggers:
   - "#KD"
   - "KD 읽기"

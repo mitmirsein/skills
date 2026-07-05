@@ -7,7 +7,7 @@ description: >
   theological and humanities papers. Use when the user asks to extract,
   parse, or x-ray a paper PDF. 키워드: 논문 투시, PDF 추출, 논문 뼈대, 엑스레이
 version: 2.3.0
-author: MS_Dev (Peppone)
+author: MS_Dev
 triggers:
   - "PDF 추출"
   - "논문 파싱"

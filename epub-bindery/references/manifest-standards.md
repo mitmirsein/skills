@@ -6,7 +6,7 @@
 ```yaml
 title: "도서 제목"
 author: "저자명"
-creator: "수석 보좌관 빼뽀네 (MS_Dev)"
+creator: "MS_Dev"
 date: "YYYY-MM-DD"
 language: "ko-KR"
 identifier: "urn:uuid:..." # 선택 사항

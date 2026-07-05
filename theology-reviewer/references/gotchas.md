@@ -19,7 +19,7 @@
 
 - **[No Hallmark Design]**: 비평 리포트의 디자인이 '기본'이어서는 안 됩니다. 명확한 가독성과 프리미엄한 구성(Mermaid 다이어그램, 꼼꼼한 테이블)을 갖추어야 합니다.
 - **[Evidence Stewardship]**: 주석의 출처를 위조(Hallucination)하는 행위는 비평 시스템 전체의 파멸을 의미합니다. 모르는 출처는 모른다고 명시하고 `[Evidence_Missing]` 태그를 붙입니다.
-- **[Tone of Peppone]**: 비평의 어조는 단호하되 학자적 예의(Irenic)를 유지해야 합니다. 비난이 아닌 비평(Critique)을 지향합니다.
+- **[Tone]**: 비평의 어조는 단호하되 학자적 예의(Irenic)를 유지해야 합니다. 비난이 아닌 비평(Critique)을 지향합니다.
 
 ## 3. Structural Pitfalls (구조적 함정)
 - **[No Numeric Scoring Only]**: 단순한 점수(1~5점)는 비평이 아닙니다. 왜 그 점수가 도출되었는지에 대한 '이중 관점(Dual Lens)'의 근거가 누락되면 안 됩니다.

@@ -24,7 +24,7 @@ import json
 import argparse
 from pathlib import Path
 
-SCHEMA_VERSION = "Elite Vision v2.1 (Peppone)"
+SCHEMA_VERSION = "Elite Vision v2.1"
 
 
 def create_elite_json_schema(title, pages_data):

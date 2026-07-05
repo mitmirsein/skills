@@ -7,7 +7,7 @@ description: >
   user asks to load, scan, or read a folder of theological documents.
   키워드: 문서 로드, 폴더 읽기, PDF 적재
 version: 2.1.1
-author: MS_Dev (Peppone)
+author: MS_Dev
 triggers:
   - "신학 문서 로드"
   - "이 폴더 읽어줘"

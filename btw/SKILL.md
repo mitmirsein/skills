@@ -6,7 +6,7 @@ description: >
   Use when the user prefixes a question with #btw or asks something
   off-topic mid-task. 키워드: 곁다리 질문, 본론 복귀, 컨텍스트 보호
 version: 1.0.1
-author: Peppone (MS_Dev)
+author: MS_Dev
 triggers:
   - "#btw"
   - "/btw"
@@ -30,7 +30,7 @@ status: active
    - 웹 검색이 필요하면 `search_web` 사용.
    - 복잡한 논리라면 `thoughtbox-lite` (Sequential Thinking) 활용.
 4. **[REPORT-CLEAN]**: 메인 대화창에는 **[BTW Answer]** 섹션을 통해 요약된 답변(최대 5문장)만 출력하여 컨텍스트 노이즈를 차단합니다.
-5. **[PROMOTE]**: 만약 질문이 메인 태스크의 핵심적인 결론을 바꾸거나, 중요한 설계 결정사항이 된다면 리더(Peppone)에게 "메인 세션으로 승격(Promote)"을 건의하십시오.
+5. **[PROMOTE]**: 만약 질문이 메인 태스크의 핵심적인 결론을 바꾸거나, 중요한 설계 결정사항이 된다면 리더에게 "메인 세션으로 승격(Promote)"을 건의하십시오.
 
 ## 📂 Directories & Resources
 - [gotchas.md](./references/gotchas.md): 상황별 대처 전략 및 실수 방지 가이드.

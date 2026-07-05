@@ -7,7 +7,7 @@ description: >
   premature flattening of theological tension.
   키워드: 문헌 증거 주도, 주해 주도, exegesis driven, EDD, 증거 없는 주장 방지, 아포리아 보존, 증거 우선 글쓰기
 version: 2.0.0
-author: MS_Dev (Peppone)
+author: MS_Dev
 triggers:
   - "문헌 증거 주도"
   - "주해 주도"

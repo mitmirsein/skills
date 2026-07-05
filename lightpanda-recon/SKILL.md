@@ -6,7 +6,7 @@ description: >
   needs JS rendering but no login/interaction (fall back to Playwright for
   those). 키워드: 라이트판다, 가벼운 정찰, 깃헙 분석, JS 렌더링 읽기
 version: 1.0.1
-author: MS_Dev / Peppone
+author: MS_Dev
 triggers:
   - "라이트판다로 읽어줘"
   - "가볍게 정찰해줘"

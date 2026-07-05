@@ -7,7 +7,7 @@ description: >
   Markdown; for argument-skeleton briefing on top of extraction use
   paper-xray. 키워드: PDF 추출, 마크다운 변환, 비전 OCR
 version: 2.2.0
-author: MS_Dev (Peppone)
+author: MS_Dev
 triggers:
   - "PDF 추출"
   - "논문 파싱"
