@@ -70,21 +70,6 @@ curl -sL "https://api.crossref.org/works/{DOI}"
 
 Rate limit: 50 req/second. User-Agent에 이메일 추가 시 Polite Pool 진입.
 
-## Semantic Scholar (S2 Graph API)
-
-학술 논문 검색, 초록, 인용 수, Open Access PDF 링크를 구조화해서 반환한다.
-dev `.env`의 `SEMANTIC_SCHOLAR_API_KEY`를 사용하며, 키 값은 출력하지 않는다.
-
-```bash
-python .skills/semantic-scholar/scripts/s2_runner.py \
-  --query "{query}" \
-  --limit 10 \
-  --format json \
-  --fields "Philosophy,Religious Studies"
-```
-
-신학 학술 다축 탐색에서는 Google Scholar Semantic 발견 결과를 S2로 재조회해 구조화 메타데이터와 OA PDF를 확인한다. 상세 흐름은 [theology-scholar-sweep.md](theology-scholar-sweep.md)를 참조.
-
 ## OpenLibrary (도서)
 
 ```bash
@@ -129,7 +114,6 @@ curl -sL "https://api.github.com/search/code?q={query}+language:python&per_page=
 | Stack Exchange | 300/day | 인증 시 10K |
 | arXiv | 3/sec | sleep 필수 |
 | CrossRef | 50/sec | |
-| Semantic Scholar | 키 사용 시 완화 | dev `.env`의 API 키 사용 |
 | OpenLibrary | 무제한 | |
 | Wayback | 무제한 | |
 | GitHub REST | 60/hr | gh CLI 우선 |

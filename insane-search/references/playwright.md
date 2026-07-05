@@ -52,21 +52,25 @@ claude mcp add playwright -- npx @playwright/mcp@latest
 
 ### 의존성 (최초 1회)
 
+로컬 의존성은 `engine/templates/package.json`으로 관리한다 (executor가 그 디렉토리를 cwd로 실행하므로 전역 설치 대신 로컬 설치).
+
 ```bash
 # Node (시스템 설치)
 node -v   # v18+ 권장
 
-# Playwright + stealth 플러그인
-npm i -g playwright playwright-extra puppeteer-extra-plugin-stealth
+# 템플릿 로컬 의존성 (patchright 최우선 + playwright-extra/stealth 폴백)
+cd engine/templates && npm install
 
 # 시스템 Chrome 바이너리 (번들 Chromium 아님)
-npx playwright install chrome
+npx patchright install chrome
 ```
+
+**Patchright 우선**: 템플릿(`playwright_real_chrome.js`)은 `require('patchright')`를 최우선 시도한다. Patchright는 Playwright API 호환 drop-in 포크로, 2026년 탐지가 노리는 CDP `Runtime.enable`(콘솔-attach) 누출을 자체 패치한다 — 그래서 patchright 경로에서는 stealth 플러그인을 얹지 않는다. patchright가 없으면 playwright-extra+stealth, 그것도 없으면 plain playwright로 폴백한다(모두 `channel:'chrome'` 유지). 결과 envelope의 `automation` 필드로 어느 경로가 쓰였는지 확인할 수 있다.
 
 ### 호출 (engine 내부)
 
 ```python
-from insane_search.engine.executor import run_playwright_fallback
+from engine.executor import run_playwright_fallback
 
 attempt, html = run_playwright_fallback(
     "https://example.com/path",
@@ -116,7 +120,7 @@ const ctx = await chromium.launchPersistentContext(profileDir, {
 | `needs_real_tls_stack` + `needs_js_exec` | Approach 2 (real_chrome) | Akamai Bot Manager |
 | `needs_js_exec` only | Approach 1 (MCP) | Cloudflare Turnstile |
 | `needs_real_tls_stack` only | Approach 2 (real_chrome) | 일부 DataDome 설정 |
-| 둘 다 없음 | curl 체인에서 해결. Playwright 안 씀 | F5 BIG-IP (TLS만 우회 필요) |
+| 둘 다 없음 | curl 체인에서 해결. Playwright 안 씀 | F5 BIG-IP (TLS만 대응 필요) |
 
 `device_class="mobile"`이 지정되면 real_chrome → mobile 변종으로 swap.
 

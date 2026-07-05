@@ -21,18 +21,16 @@
 
 ---
 
-## Phase 1: 경량 프로브 & 페이월 타격 (병렬)
+## Phase 1: 경량 프로브 (병렬)
 
-**URL 도메인 기반 선제 타격**:
-- [paywall.md](paywall.md)의 페이월 도메인 리스트와 대조합니다.
-- 매칭되는 뉴스/미디어 사이트라면 일반 요청 대신 **Googlebot/Bingbot UA + 크롤러 IP 위장**으로 선제 타격합니다. (SEO Loophole 악용)
-- 위장 실패 시 AMP 모바일 URL 변환(`?amp`)을 즉시 시도합니다.
-
-**일반 프로브 (비-페이월 사이트 동시 시도)**:
+**먼저 시도** (동시):
 - WebFetch (Claude 내장)
 - Jina Reader (기본 / JSON / SPA 모드)
 - curl Chrome Desktop UA
+
+**아직 성공 없으면 추가 시도**:
 - curl 모바일 UA + 모바일 URL (`m.{domain}`)
+- curl Googlebot UA
 - URL 변형 시도: `.json`, `/rss`, `/feed`
 
 **사이드카** (1차와 동시, low-trust):
@@ -42,7 +40,8 @@
 → **원본이 하나라도 성공하면 사이드카는 참고만.** 전부 실패 시에만 사이드카 채택 (provenance 태깅 필수)
 
 **모든 응답에서 메타데이터도 추출**: OGP, JSON-LD — [metadata.md](metadata.md) 참조
-상세: [jina.md](jina.md), [cache-archive.md](cache-archive.md), [rss.md](rss.md), **[paywall.md](paywall.md)**
+
+상세: [jina.md](jina.md), [cache-archive.md](cache-archive.md), [rss.md](rss.md)
 
 ---
 
@@ -70,7 +69,7 @@ Phase 1 → Phase 2 전환 조건:
 
 **의존성 확보**:
 ```bash
-python3 -c "import curl_cffi" 2>/dev/null || pip install curl_cffi -q
+python3 -c "import curl_cffi" 2>/dev/null || pip install -U "curl_cffi>=0.15.0" -q
 ```
 설치 실패 시 → 즉시 Phase 3으로.
 
@@ -144,7 +143,7 @@ browser_evaluate → () => document.body.innerText  (Light Mode — 먼저)
 |------|----------|------|
 | X SPA 셸 (247KB) | 200 OK + `Sign in to X` 또는 `hasResults: false` | 실패 — WebSearch+oEmbed 폴백 |
 | CAPTCHA 페이지 | 200 OK + `captcha\|recaptcha\|hcaptcha\|cf-turnstile` | 실패 — 다음 Phase |
-| 소프트 페이월 | 200 OK + `subscribe to (continue|read)\|member-only\|구독하세요` | 실패 — 페이월 우회 에스컬레이션 (paywall.md) |
+| 소프트 페이월 | 200 OK + `member-only\|subscribe to read\|구독하세요` | 부분 성공 — 메타만 채택 |
 | DDG 소프트 리밋 | 202 Accepted + body 15KB 미만 | 실패 — 다른 엔진 폴백 |
 | 빈 JSON | 200 OK + `hasResults.*false\|"entries":\s*\[\]` | 실패 — 다른 방법 시도 |
 | 지역 차단 | 200 OK + `not available in your region\|geo-restricted` | 실패 — "지역 차단" 알림 |
