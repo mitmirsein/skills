@@ -31,7 +31,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | code-simplifier | active | A | Simplifies code — token diet, complexity reduction, and abstraction flattening while prese… |
 | git-workflow | active | A | Standardized Git workflow — Conventional Commits, branch strategy, and pull-request flow. … |
 | github-ops | active | A | Automates GitHub operations via the gh CLI — repo creation, remote wiring, issues, and PRs… |
-| insane-search | active | C | Adaptive access for blocked websites — tries every method until one works. Use when WebFet… |
+| insane-search | active | A | Adaptive access for blocked websites — tries every method until one works. Use when WebFet… |
 | langgraph-supervisor | active | A | Orchestrates large multi-step jobs as a Supervisor-Worker state machine — plan, delegate t… |
 | lightpanda-recon | active | A | Headless browser recon via the Lightpanda binary — faster and lighter than Playwright for … |
 | log-miner | active | A | Mines unstructured conversation logs (.logs/) for reusable knowledge — flash ideas, code s… |
@@ -87,8 +87,8 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | 스킬 | 상태 | 등급 | 설명 |
 |---|---|---|---|
 | gn-voice | — | B | AI가 쓴 한국어 글을 저자 본인 문체로 재작성하는 개인 전용 윤문 스킬. 코퍼스 144건(threads+답글+브런치)에서 증류한 장르 팩(chat/reply/e… |
-| hwp-pages-convert | active | B | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
-| sobeom-illustrations | active | B | Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create … |
+| hwp-pages-convert | active | A | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
+| sobeom-illustrations | active | A | Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create … |
 | theology-evidence-writing | active | A | Use when writing theology notes, doing biblical exegesis, or building a theological claim … |
 | theology-handoff | active | A | Use when a research or writing session is ending, context is about to be compacted, or a l… |
 

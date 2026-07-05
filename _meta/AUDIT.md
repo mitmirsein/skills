@@ -6,16 +6,13 @@
 
 | A | B | C | D | F |
 |---|---|---|---|---|
-| 84 | 3 | 1 | 0 | 0 |
+| 87 | 1 | 0 | 0 | 0 |
 
 ## 스킬별 결과
 
 | 스킬 | 등급 | 분류 | 줄수 | 문제 |
 |---|---|---|---|---|
-| insane-search | C | dev-tools | 366 | E06 SKILL.md 366줄 (상한 200줄 초과); W05 description 하이브리드 형식 아님 (§3) |
 | gn-voice 🔗 | B | uncategorized | 62 | W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W11 스킬 내부 .venv/ 존재 (§1 위반) |
-| hwp-pages-convert | B | uncategorized | 54 | W05 description 하이브리드 형식 아님 (§3) |
-| sobeom-illustrations | B | uncategorized | 84 | W05 description 하이브리드 형식 아님 (§3) |
 | academic-illustrator | A | media | 55 | — |
 | agent-forge | A | dev-tools | 125 | — |
 | arc-librarian | A | vault | 59 | — |
@@ -41,6 +38,8 @@
 | google-scholar-quick | A | academic-search | 52 | — |
 | google-scholar-semantic | A | academic-search | 118 | — |
 | grafeo-connector | A | utilities | 66 | — |
+| hwp-pages-convert | A | uncategorized | 56 | — |
+| insane-search | A | dev-tools | 81 | — |
 | ixtheo-searcher | A | academic-search | 42 | — |
 | journal-collector | A | academic-search | 57 | — |
 | kci-api-searcher | A | academic-search | 65 | — |
@@ -71,6 +70,7 @@
 | sermon-insight | A | theology | 50 | — |
 | slash-criticalthink | A | writing | 56 | — |
 | slide | A | media | 115 | — |
+| sobeom-illustrations | A | uncategorized | 84 | — |
 | stealth-browser | A | dev-tools | 53 | — |
 | tawp | A | academic-search | 116 | — |
 | tech-architect | A | dev-tools | 47 | — |

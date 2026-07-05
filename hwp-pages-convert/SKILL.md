@@ -4,7 +4,9 @@ description: >
   Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents,
   sanitizing emphasis formatting to follow the vault constitution (converting italics
   to bold, and injecting zero-width spaces after bold markers when followed
-  by Korean particles). 키워드: 한글 변환, HWP 변환, HWPX 변환, hwp to md, pages 변환, pages to md
+  by Korean particles). Use when the user has a .hwp/.hwpx or .pages file (single file
+  or a folder to batch-convert) and wants it as Markdown.
+  키워드: 한글 변환, HWP 변환, HWPX 변환, hwp to md, pages 변환, pages to md
 version: 1.1.0
 author: Antigravity
 triggers:

@@ -2,7 +2,7 @@
 name: sobeom-illustrations
 version: 1.0.0
 status: active
-description: Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create concept graphics, blog illustrations, workflow diagrams, or metaphor sketches in Korean or English — using the 소범(Sobeom) IP, pure white background, minimal hand-drawn line art, sparse red/orange/blue annotations, and a clean absurd product-sketch aesthetic.
+description: Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create concept graphics, blog illustrations, workflow diagrams, or metaphor sketches in Korean or English — using the 소범(Sobeom) IP, pure white background, minimal hand-drawn line art, sparse red/orange/blue annotations, and a clean absurd product-sketch aesthetic. 키워드: 소범 일러스트, 손그림 삽화, 개념 그래픽, 블로그 삽화, 소범 그림, sobeom illustration, hand-drawn diagram.
 ---
 
 # Sobeom (소범) Hand-Drawn Illustrations
