@@ -1,12 +1,12 @@
 # .skills 감사 결과 (AUDIT)
 
-생성: 2026-07-05 / 검사 대상: 88개 (gws, _template 제외) / 도구: `_meta/validate.py`
+생성: 2026-07-09 / 검사 대상: 89개 (gws, _template 제외) / 도구: `_meta/validate.py`
 
 ## 등급 분포
 
 | A | B | C | D | F |
 |---|---|---|---|---|
-| 87 | 1 | 0 | 0 | 0 |
+| 88 | 1 | 0 | 0 | 0 |
 
 ## 스킬별 결과
 
@@ -30,6 +30,7 @@
 | design-md | A | utilities | 92 | — |
 | dictionary-editor | A | utilities | 49 | — |
 | digital-curator | A | vault | 57 | — |
+| econ-redteam | A | uncategorized | 140 | — |
 | eng-student-consultant | A | writing | 80 | — |
 | epub-bindery | A | media | 57 | — |
 | faith-compass | A | theology | 112 | — |

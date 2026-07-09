@@ -1,6 +1,6 @@
 # .skills 스킬 인덱스 (INDEX)
 
-갱신: 2026-07-05 / `python3 _meta/validate.py --index`로 재생성
+갱신: 2026-07-09 / `python3 _meta/validate.py --index`로 재생성
 
 gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인덱스에서 제외.
 
@@ -82,10 +82,11 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | theology-terminology-linter | active | A | Lints a document for inconsistent Korean renderings of the same theological term (equivoca… |
 | theology-translator | active | A | Translates theological texts (DE/EN → KO) through an orchestrator-led, role-isolated team … |
 
-## uncategorized (5)
+## uncategorized (6)
 
 | 스킬 | 상태 | 등급 | 설명 |
 |---|---|---|---|
+| econ-redteam | active | A | Adversarially attacks economic policy proposals (ex-ante) and empirical econometric work (… |
 | gn-voice | — | B | AI가 쓴 한국어 글을 저자 본인 문체로 재작성하는 개인 전용 윤문 스킬. 코퍼스 144건(threads+답글+브런치)에서 증류한 장르 팩(chat/reply/e… |
 | hwp-pages-convert | active | A | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
 | sobeom-illustrations | active | A | Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create … |
