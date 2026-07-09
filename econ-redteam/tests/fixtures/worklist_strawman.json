@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "mode": "ex-ante",
+  "target_ref": "tests/fixtures/target_exante.md",
+  "total_items": 3,
+  "instruction": "판정 슬롯이 채워진 worklist — decide 게이트의 세 갭을 모두 재현한다.",
+  "items": [
+    {
+      "id": "W1",
+      "section": "Evidence-Check",
+      "axis": "A3",
+      "part": null,
+      "severity": "minor",
+      "paragraph_id": "P_0003",
+      "source_quote": "청년은 만 34세 이하로 정의한다",
+      "critique": "만 34세라는 연령 상한은 자의적이며 34세와 35세 사이에 경제적 차이가 없다.",
+      "steelman": "연령 상한은 어떤 값이든 자의적이지만, 청년 고용 통계의 기존 정의와 정합적으로 설정됐다.",
+      "falsification_condition": "다른 청년 정책의 연령 기준과 일치함을 보이면 철회된다.",
+      "is_strongest": "false",
+      "engaged_by_target": "대면",
+      "verdict": "strawman",
+      "needs_judgment": true
+    },
+    {
+      "id": "W2",
+      "section": "Leap-Alert",
+      "axis": "A1",
+      "part": null,
+      "severity": "blocking",
+      "paragraph_id": "P_0002",
+      "source_quote": "재정승수는 1.3으로 가정하였고",
+      "critique": "승수의 경기 국면 의존성이 명시되지 않았고 무정책 반사실 기준선이 없다.",
+      "steelman": "재정승수 1.3은 국내 중소기업 대상 재정지출 연구의 중앙값에 해당한다.",
+      "falsification_condition": "국면별 승수 문헌과 무정책 기준선 대비 순증 추계가 제시되면 철회된다.",
+      "is_strongest": "true",
+      "engaged_by_target": "미대면",
+      "verdict": "valid",
+      "needs_judgment": true
+    },
+    {
+      "id": "W3",
+      "section": "Evidence-Check",
+      "axis": "A5",
+      "part": null,
+      "severity": "major",
+      "paragraph_id": "P_0004",
+      "source_quote": "정책 시행 이후 청년 고용률은 2%p 상승할 것으로 전망한다",
+      "critique": "점추정만 있고 비관 시나리오와 꼬리위험이 없다.",
+      "steelman": "제안서 단계에서 중심 추정치만 제시하는 것은 관례다.",
+      "falsification_condition": "민감도 표와 최악 시나리오 비용이 제시되면 철회된다.",
+      "is_strongest": "true",
+      "engaged_by_target": "대면",
+      "verdict": "valid",
+      "needs_judgment": true
+    }
+  ],
+  "aporia": [
+    {
+      "name": "단기 고용 창출 대 장기 기업 성장",
+      "poles": ["즉각적 청년 고용 절벽 방지", "규모 문턱이 없는 기업 성장 경로"],
+      "critique_id": "W1",
+      "verdict": "평탄화"
+    }
+  ]
+}

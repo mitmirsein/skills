@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "mode": "ex-ante",
+  "target_ref": "tests/fixtures/target_exante.md",
+  "critiques": [
+    {
+      "id": "C1",
+      "section": "Leap-Alert",
+      "axis": "A1",
+      "part": null,
+      "severity": "blocking",
+      "paragraph_id": "P_0002",
+      "source_quote": "재정승수는 1.3으로 가정하였고",
+      "critique": "승수 1.3이 어느 경기 국면과 어느 통화정책 반응을 전제하는지 명시되지 않았다. 유동성 함정 하에서 추정된 승수를 정상 국면에 전용하면 고용 효과가 계통적으로 과대 계상된다. 또한 무정책 반사실 기준선이 없어, 정책 없이도 발생했을 고용 회복이 정책의 공로로 계상된다.",
+      "steelman": "재정승수 1.3은 국내 중소기업 대상 재정지출 연구의 중앙값에 해당하며, 한시적 3년 프로그램이라 승수의 시점 간 변동을 무시해도 1차 근사로는 타당할 수 있다.",
+      "falsification_condition": "동일 경기 국면·통화정책 반응 하에서 추정된 승수 문헌과, 무정책 기준선 대비 순증 고용 추계가 함께 제시되면 이 지적은 철회된다.",
+      "engaged_by_target": "UNJUDGED",
+      "is_strongest": "UNJUDGED",
+      "verdict": "UNJUDGED"
+    },
+    {
+      "id": "C2",
+      "section": "Leap-Alert",
+      "axis": "A2",
+      "part": null,
+      "severity": "major",
+      "paragraph_id": "P_0004",
+      "source_quote": "본 세액공제는 중소기업의 채용 비용을 직접 낮추어 고용을 창출하며",
+      "critique": "법적 귀착(기업이 공제를 받음)과 경제적 귀착(누가 실제로 이득을 보는가)이 구분되지 않았다. 청년 노동공급이 탄력적이면 공제분은 고용 증가가 아니라 임금 인하 또는 기업 이윤으로 흡수된다. 승자와 패자가 소득분위·지역·산업으로 식별되지 않았다.",
+      "steelman": "채용 비용의 직접 인하는 노동수요곡선을 우측 이동시키므로, 노동공급이 완전 탄력적이지 않은 한 고용은 반드시 일부 증가한다.",
+      "falsification_condition": "청년 노동공급 탄력성 추정치와 그에 따른 전가율(pass-through) 계산이 제시되면 귀착 지적은 정량화되어 해소될 수 있다.",
+      "engaged_by_target": "UNJUDGED",
+      "is_strongest": "UNJUDGED",
+      "verdict": "UNJUDGED"
+    },
+    {
+      "id": "D1",
+      "section": "Policy-Directives",
+      "refs": [
+        "C1"
+      ],
+      "critique": "승수의 국면 의존성을 판가름하려면 경기 국면별 재정승수 추정 문헌과, 무정책 기준선 대비 순증 고용의 민감도 표가 필요하다. 이는 정책 지지가 아니라 어떤 자료가 지적을 해소하는지에 대한 리서치 쿼리다."
+    }
+  ],
+  "aporia": []
+}
