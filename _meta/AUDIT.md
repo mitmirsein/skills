@@ -1,17 +1,23 @@
 # .skills 감사 결과 (AUDIT)
 
-생성: 2026-07-09 / 검사 대상: 89개 (gws, _template 제외) / 도구: `_meta/validate.py`
+생성: 2026-08-03 / 검사 대상: 97개 (gws, _template 제외) / 도구: `_meta/validate.py`
 
 ## 등급 분포
 
 | A | B | C | D | F |
 |---|---|---|---|---|
-| 88 | 1 | 0 | 0 | 0 |
+| 90 | 1 | 5 | 0 | 1 |
 
 ## 스킬별 결과
 
 | 스킬 | 등급 | 분류 | 줄수 | 문제 |
 |---|---|---|---|---|
+| books | F | uncategorized | — | E01 SKILL.md 없음 |
+| book-to-skill 🔗 | C | uncategorized | 737 | E06 SKILL.md 737줄 (상한 200줄 초과); E03 필수 필드 없음: version; W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated) |
+| slash-auto-essay 🔗 | C | uncategorized | 39 | E03 필수 필드 없음: version; W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W09 참조 파일 없음: scripts/validate_passage.py, templates/lesson_plan_prompt.j2 |
+| slash-essay-qgen 🔗 | C | uncategorized | 45 | E03 필수 필드 없음: version; W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W09 참조 파일 없음: scripts/render_package.py, scripts/validate_assessment.py, templates/question_prompt.j2 |
+| slash-essay-review 🔗 | C | uncategorized | 34 | E03 필수 필드 없음: version; W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W09 참조 파일 없음: scripts/validate_assessment.py |
+| slash-lesson-plan 🔗 | C | uncategorized | 45 | E03 필수 필드 없음: version; W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W09 참조 파일 없음: references/curriculum-2022.json, scripts/render_package.py, scripts/validate_lesson_plan.py, templates/lesson_plan_prompt.j2 |
 | gn-voice 🔗 | B | uncategorized | 62 | W05 description 하이브리드 형식 아님 (§3); W13 status 필드 없음 (active|stub|deprecated); W11 스킬 내부 .venv/ 존재 (§1 위반) |
 | academic-illustrator | A | media | 55 | — |
 | agent-forge | A | dev-tools | 125 | — |
@@ -27,6 +33,7 @@
 | create-slide-from-markdown | A | media | 146 | — |
 | create-slide-image-prompts | A | media | 101 | — |
 | crossref-journal-searcher | A | academic-search | 42 | — |
+| deep-research | A | uncategorized | 118 | — |
 | design-md | A | utilities | 92 | — |
 | dictionary-editor | A | utilities | 49 | — |
 | digital-curator | A | vault | 57 | — |
@@ -39,6 +46,7 @@
 | google-scholar-quick | A | academic-search | 52 | — |
 | google-scholar-semantic | A | academic-search | 118 | — |
 | grafeo-connector | A | utilities | 66 | — |
+| hatch 🔗 | A | uncategorized | 135 | — |
 | hwp-pages-convert | A | uncategorized | 56 | — |
 | insane-search | A | dev-tools | 81 | — |
 | ixtheo-searcher | A | academic-search | 42 | — |
@@ -60,7 +68,7 @@
 | obsidian-web-clipper | A | vault | 70 | — |
 | ontology-builder | A | utilities | 51 | — |
 | paper-xray | A | academic-search | 143 | — |
-| pdf-extractor | A | media | 135 | — |
+| pdf-extractor | A | media | 148 | — |
 | prompt-engineer | A | dev-tools | 60 | — |
 | react-components | A | dev-tools | 55 | — |
 | remotion-studio | A | media | 59 | — |
@@ -88,7 +96,7 @@
 | theology-pdf-maker | A | theology | 127 | — |
 | theology-reader | A | theology | 57 | — |
 | theology-redteam | A | theology | 75 | — |
-| theology-research | A | theology | 75 | — |
+| theology-research | A | theology | 81 | — |
 | theology-reviewer | A | theology | 149 | — |
 | theology-scholar | A | theology | 131 | — |
 | theology-terminology-linter | A | theology | 34 | — |

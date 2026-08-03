@@ -1,6 +1,6 @@
 # .skills 스킬 인덱스 (INDEX)
 
-갱신: 2026-07-09 / `python3 _meta/validate.py --index`로 재생성
+갱신: 2026-08-03 / `python3 _meta/validate.py --index`로 재생성
 
 gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인덱스에서 제외.
 
@@ -53,7 +53,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | epub-bindery | active | A | Compiles Markdown files into a publication-grade EPUB ebook via pandoc — chapters, metadat… |
 | lecture-video-generator | active | A | Orchestrates the existing lecture_video_generator project pipeline to turn a theology lect… |
 | media-factory | active | A | Creative studio — generates high-quality AI images ("holy aesthetic" presets) and converts… |
-| pdf-extractor | active | A | Extracts PDFs to high-fidelity Markdown using structural hybrid engines, elite Vision-base… |
+| pdf-extractor | active | A | Extracts PDFs to high-fidelity Markdown using structural engines, an opt-in agent-guided V… |
 | remotion-studio | active | A | Generates videos programmatically with Remotion (code-as-video), edge-tts narration, and J… |
 | slide | active | A | Turns a Markdown/Obsidian document into a Master Of Slide deck and edits existing decks — … |
 | yt-digest | active | A | Extracts transcripts from YouTube URLs via yt-dlp, cleans them up, and produces structured… |
@@ -82,13 +82,21 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | theology-terminology-linter | active | A | Lints a document for inconsistent Korean renderings of the same theological term (equivoca… |
 | theology-translator | active | A | Translates theological texts (DE/EN → KO) through an orchestrator-led, role-isolated team … |
 
-## uncategorized (6)
+## uncategorized (14)
 
 | 스킬 | 상태 | 등급 | 설명 |
 |---|---|---|---|
+| book-to-skill | — | C | Converts books and documents (PDF, EPUB, DOCX, HTML, Markdown, plain text, RTF, MOBI/AZW w… |
+| books | — | F | — |
+| deep-research | active | A | Runs a resumable, tool-agnostic deep-research pipeline with query planning, parallel-or-se… |
 | econ-redteam | active | A | Adversarially attacks economic policy proposals (ex-ante) and empirical econometric work (… |
 | gn-voice | — | B | AI가 쓴 한국어 글을 저자 본인 문체로 재작성하는 개인 전용 윤문 스킬. 코퍼스 144건(threads+답글+브런치)에서 증류한 장르 팩(chat/reply/e… |
+| hatch | active | A | Create or manage a Hatch lifecycle workspace when a project needs a private workbench, a p… |
 | hwp-pages-convert | active | A | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
+| slash-auto-essay | — | C | 주제와 학년을 받아 지문·assessment package·검수·교안·PDF를 순서대로 생성하는 오케스트레이터입니다. |
+| slash-essay-qgen | — | C | 지문과 학년을 분석해 적응형 영어 서술형 assessment package를 생성하고 결정론적 검증까지 수행합니다. |
+| slash-essay-review | — | C | assessment package와 학생·교사용 렌더를 결정론적·의미 기반으로 교차 검수합니다. |
+| slash-lesson-plan | — | C | 검증된 assessment package와 교육과정 reference로 구조화된 교안 JSON과 교사용 렌더를 생성합니다. |
 | sobeom-illustrations | active | A | Generate Sobeom-style hand-drawn article illustrations. Use when the user wants to create … |
 | theology-evidence-writing | active | A | Use when writing theology notes, doing biblical exegesis, or building a theological claim … |
 | theology-handoff | active | A | Use when a research or writing session is ending, context is about to be compacted, or a l… |

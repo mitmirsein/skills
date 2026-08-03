@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Research"
+  short_description: "출처 검증·재개·각주 변환을 갖춘 범용 심층 연구 파이프라인"
+  default_prompt: "Use $deep-research to investigate this topic, verify its claims, and deliver a footnoted research report."

@@ -1,12 +1,12 @@
 ---
 name: pdf-extractor
 description: >
-  Extracts PDFs to high-fidelity Markdown using structural hybrid engines,
-  elite Vision-based OCR, and a 5-pass healing pipeline — designed for
-  theological papers. Use when the user asks to extract or convert a PDF to
-  Markdown; for argument-skeleton briefing on top of extraction use
-  paper-xray. 키워드: PDF 추출, 마크다운 변환, 비전 OCR
-version: 2.2.0
+  Extracts PDFs to high-fidelity Markdown using structural engines, an opt-in
+  agent-guided Vision transcription contract, and a 5-pass healing pipeline —
+  designed for theological papers. Use when the user asks to extract or
+  convert a PDF to Markdown; for argument-skeleton briefing on top of
+  extraction use paper-xray. 키워드: PDF 추출, 마크다운 변환, 비전 전사
+version: 2.3.0
 author: MS_Dev
 triggers:
   - "PDF 추출"
@@ -15,7 +15,7 @@ triggers:
   - "extract pdf"
 capabilities:
   - structural_hybrid_extraction
-  - elite_vision_ocr
+  - vision_transcription_contract
   - intelligent_parenthesis_healing
   - footnote_separation
   - deletion_audit_report
@@ -31,16 +31,17 @@ PDF를 신학 연구에 최적화된 마크다운으로 추출하고 교정하�
 
 ## 🛠️ 주요 기능
 
-1. **Core Mode (Structural)**: `opendataloader` 하이브리드 엔진을 사용하여 텍스트와 좌표 정보를 고속 추출합니다.
-2. **Elite Mode (Vision)**: 에이전트의 시각 지능을 활용하여 이미지로부터 직접 텍스트를 복원합니다. (독일어/희랍어 원전 등 고난도 문서 권장)
-3. **Healing Pipeline (v2.0)**: 추출 후 발생하는 괄호 노이즈, 각주 혼입, 깨진 외래어를 5단계 로직으로 자동 교정합니다.
+1. **기본 Core**: `opendataloader`가 기본 엔진이며 일반/Hybrid 모드를 지원합니다.
+2. **opt-in fast lane**: `pdf-inspector`는 단순 native-text PDF에만 사용합니다. 스캔·Mixed·인코딩 이상·다단/복잡 레이아웃은 안전 게이트에서 완료 처리하지 않습니다.
+3. **Vision 계약**: `vision_*` 스크립트는 에이전트가 이미지를 읽어 결과를 작성할 경로와 JSON 골격만 제공합니다. 내장 OCR 엔진이 아닙니다.
+4. **Healing Pipeline**: 추출 후 괄호 노이즈, 각주 혼입, 깨진 외래어를 좁은 휴리스틱으로 교정합니다.
 
 ---
 
 ## 🚀 사용법
 
 ### 0단계: 사전 분류 (Pre-flight Triage) — 권장 진입점
-무거운 파싱 전에 첫 3페이지를 고속 스캔하여 Core / Vision 경로를 결정합니다.
+현재 preflight는 pypdf로 첫 3페이지를 고속 스캔하여 기존 `CORE` / `VISION` 경로를 제안합니다. `pdf-inspector` 자동 라우팅은 아직 활성화하지 않습니다.
 ```bash
 # 사람용 판정 리포트
 uv run python scripts/preflight.py <PDF_PATH>
@@ -51,19 +52,32 @@ uv run python scripts/preflight.py <PDF_PATH> --json
 → `route_code`가 `CORE`면 1단계로, `VISION`이면 3단계로 분기하십시오.
 
 ### 1단계: 텍스트 추출 (Core)
+
+기본 동작은 `opendataloader`입니다.
 ```bash
+uv run python scripts/extract_pdf.py --input <PDF_PATH>
 uv run python scripts/extract_pdf.py --input <PDF_PATH> --hybrid
 ```
 > ⚠️ `--hybrid`는 별도 서버가 필요합니다. **먼저 다른 터미널에서**
 > `uv run opendataloader-pdf-hybrid`를 기동하십시오 (미기동 시 "Hybrid server" 에러).
 > 텍스트 PDF는 `--hybrid` 없이 일반 모드로 충분합니다. (gotchas.md 참조)
 
-연구 인용용 페이지 마커가 필요하면 JSON의 `page number`를 사용해
-`===== p.N =====` 마커가 박힌 Markdown을 생성합니다.
+단순 native-text PDF를 명시적으로 fast lane에 넣을 때만 다음을 사용합니다.
+```bash
+uv run python scripts/extract_pdf.py --input <PDF_PATH> --engine pdf-inspector
+```
+안전 게이트가 `pdf_type`, OCR 필요 페이지, 인코딩, 다단/복잡 레이아웃을 검사합니다. 실패 시 Poppler로 조용히 바꾸지 않고 실패 메시지를 반환합니다. Poppler를 직접 선택하려면 다음을 사용합니다.
+```bash
+uv run python scripts/extract_pdf.py --input <PDF_PATH> --engine poppler
+```
+`--hybrid`는 `opendataloader`에서만 유효합니다.
+
+연구 인용용 페이지 마커가 필요하면 다음처럼 생성합니다.
 ```bash
 uv run python scripts/extract_pdf.py --input <PDF_PATH> --page-markers
+uv run python scripts/extract_pdf.py --input <PDF_PATH> --engine pdf-inspector --page-markers
 ```
-출력은 `<파일명>_paged.md`이며, 후속 `post_cleaner.py`는 이 마커를 구조 라인으로 보존합니다.
+OpenDataLoader는 JSON의 1-based `page number`를 사용하고, `pdf-inspector`는 0-based `page.page`에 `--start-page`를 더합니다. 출력은 `<파일명>_paged.md`이며, 후속 `post_cleaner.py`는 페이지 마커와 표·목록·코드 블록을 구조 라인으로 보존합니다.
 
 ### 2단계: 구조 정제 및 지능형 교정 (Healing)
 ```bash
@@ -73,7 +87,7 @@ uv run python scripts/post_cleaner.py output/논문.md
 # 지능형 교정 (문자 단위 괄호 매칭, 각주 분리, 외래어 파편 제거)
 uv run python scripts/healer.py output/논문_cleaned.md
 
-# 감사 모드: 삭제·재분류된 모든 span을 _healed.report.md로 기록 (학술 손실 검증 권장)
+# 감사 모드: healer 내부의 삭제·재분류 span을 _healed.report.md로 기록
 uv run python scripts/healer.py output/논문_cleaned.md --report
 ```
 
@@ -117,9 +131,8 @@ python3 scripts/sync_engine.py --check  # drift 검사만 (커밋/CI 전, 불일
 미러 무결성은 `paper-xray/tests/test_engine_parity.py`가 강제합니다(1바이트라도 어긋나면 FAIL).
 
 ## 🔧 의존성
-- 정본: MS_Dev 워크스페이스 `pyproject.toml` (`opendataloader-pdf`, `pypdf`).
-  워크스페이스 내에서는 `uv run`이 자동 해석 — 별도 설치 불필요.
-- 워크스페이스 밖 단독 사용: `uv pip install -r requirements.txt`
+- 정본: 이 스킬의 `requirements.txt` (`opendataloader-pdf`, `pdf-inspector`, `pypdf`). 존재하지 않는 루트 `pyproject.toml`을 전제로 하지 않습니다.
+- 설치: `uv pip install -r requirements.txt` (두 Mac에서 각자 architecture에 맞는 wheel을 설치)
 - Intel Mac은 PyTorch 충돌 가능 — `gotchas.md §2` 참조.
 - `extract_pdf.py`의 `--hybrid`는 API/CLI 기본값이 **False로 일치**(서버 선행 필요).
 

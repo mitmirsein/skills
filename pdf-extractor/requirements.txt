@@ -1,12 +1,9 @@
 # pdf-extractor 런타임 의존성
 # ─────────────────────────────────────────────────────────────
-# 정본(canonical) 선언 위치: MS_Dev 워크스페이스 루트 pyproject.toml
-#   ([tool.uv.workspace] 관리). 워크스페이스 안에서는 `uv run` 이
-#   이 의존성을 자동 해석하므로 별도 설치가 불필요하다.
-#
-# 이 파일은 스킬을 워크스페이스 밖에서 단독 사용할 때를 위한
-# self-describing 폴백이다. 버전 하한은 루트 pyproject 와 일치시킨다
-# (임의 추정 아님). 설치:  uv pip install -r requirements.txt
+# 이 파일은 pdf-extractor 스킬 런타임 의존성의 정본이다.
+# 이 스킬 디렉터리에는 pyproject.toml 기반 workspace 선언이 없으므로,
+# 단독 실행·환경 재현에는 이 파일을 사용한다. 설치:
+#   uv pip install -r requirements.txt
 #
 # ⚠️ Intel Mac(2017 iMac): opendataloader-pdf 의 PyTorch 의존성이
 #    충돌할 수 있다. CPU 전용 휠 설치 또는 일반 모드(--hybrid 미사용)
@@ -17,6 +14,7 @@
 # ─────────────────────────────────────────────────────────────
 
 opendataloader-pdf>=2.0.2    # extract_pdf.py — Core/Hybrid 추출 엔진
+pdf-inspector>=0.2.5,<0.3.0  # 0.2.6 API 기준; release-age 가드가 허용 전에는 0.2.5 선택 가능
 pypdf>=6.10.0                # preflight.py   — 사전 분류 텍스트 스캔
 
 # healer.py / post_cleaner.py / vision_*.py 는 표준 라이브러리만 사용한다.
