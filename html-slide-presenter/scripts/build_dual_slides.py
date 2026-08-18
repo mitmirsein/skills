@@ -2,18 +2,20 @@
 """
 Dual Slide & Presenter HTML Builder
 Generates a synchronized pair of HTML files:
-1. [name]_slides.html   - Main fullscreen presentation deck with canvas drawing tools.
-2. [name]_presenter.html - Presenter view with timer, clock, speaker notes, and jump buttons.
+1. [name]_slides.html   - Main fullscreen presentation deck with canvas drawing tools and QR code modal.
+2. [name]_presenter.html - Mobile-optimized presenter remote with timer, clock, speaker notes, swipe navigation, and jump buttons.
 """
 
 import argparse
 import html
 import json
 import re
+import shutil
 import sys
 from pathlib import Path
 
 TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
+SCRIPTS_DIR = Path(__file__).resolve().parent
 
 
 def sanitize_channel_name(title: str) -> str:
@@ -21,7 +23,7 @@ def sanitize_channel_name(title: str) -> str:
     return f"slide_sync_{cleaned[:30]}"
 
 
-def build_dual_slides(deck_data: dict, output_dir: Path, base_name: str = "presentation") -> tuple[Path, Path]:
+def build_dual_slides(deck_data: dict, output_dir: Path, base_name: str = "presentation", copy_server: bool = True) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     
     title = deck_data.get("title", "Presentation")
@@ -99,9 +101,16 @@ def build_dual_slides(deck_data: dict, output_dir: Path, base_name: str = "prese
     pres_html = pres_html.replace("{{SPEECHES_JSON}}", json.dumps(speeches, ensure_ascii=False))
     pres_html = pres_html.replace("{{TITLES_JSON}}", json.dumps(titles, ensure_ascii=False))
     pres_html = pres_html.replace("{{CHANNEL_NAME}}", channel_name)
+    pres_html = pres_html.replace("{{MAIN_SLIDES_FILENAME}}", slides_filename)
     
     slides_path.write_text(main_html, encoding="utf-8")
     presenter_path.write_text(pres_html, encoding="utf-8")
+    
+    # Copy standalone runner server if requested
+    if copy_server:
+        server_src = SCRIPTS_DIR / "serve_deck.py"
+        if server_src.exists():
+            shutil.copy2(server_src, output_dir / "serve_deck.py")
     
     return slides_path, presenter_path
 
@@ -111,6 +120,7 @@ def main():
     parser.add_argument("deck_json", type=Path, help="Path to deck.json data file")
     parser.add_argument("-o", "--output-dir", type=Path, default=Path("."), help="Output directory")
     parser.add_argument("-n", "--name", type=str, default="deck", help="Base name for generated files")
+    parser.add_argument("--no-server", action="store_true", help="Do not copy serve_deck.py to output directory")
     
     args = parser.parse_args()
     
@@ -119,11 +129,13 @@ def main():
         sys.exit(1)
         
     deck_data = json.loads(args.deck_json.read_text(encoding="utf-8"))
-    s_path, p_path = build_dual_slides(deck_data, args.output_dir, args.name)
+    s_path, p_path = build_dual_slides(deck_data, args.output_dir, args.name, copy_server=not args.no_server)
     
     print(f"Successfully generated dual slides:")
     print(f"  1. Main Slides:     {s_path}")
     print(f"  2. Presenter View:  {p_path}")
+    if not args.no_server:
+        print(f"  3. Sync Server:     {args.output_dir / 'serve_deck.py'}")
 
 
 if __name__ == "__main__":

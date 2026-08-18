@@ -73,9 +73,24 @@ const Cover: Page = () => <div>…</div>;
 const Body: Page = () => <div>…</div>;
 
 export const meta: SlideMeta = { title: 'My slide' };
+
+// 발표자 뷰 전용 블릿 기호 요약 대본
+export const notes: (string | undefined)[] = [
+  '• 인사 및 핵심 주제\n• 문제 제기 및 배경',
+  '• 아키텍처 다이어그램 분석\n• 3대 개선 효과 강조',
+];
+
+// TTS / MP4 영상 자막용 구어체 완성형 문장
+export const narration: (string | undefined)[] = [
+  '안녕하세요. 오늘 다룰 핵심 주제와 배경에 대해 설명드리겠습니다.',
+  '두 번째 슬라이드에서는 시스템 아키텍처와 개선 효과를 살펴보겠습니다.',
+];
+
 export default [Cover, Body] satisfies Page[];
 ```
 *   `export default` must be a **non-empty array of zero-prop React components**, one per page.
+*   **Speaker Notes (`notes`)**: Always write concise **bullet points (`•`, `-`, `1.`)** for Presenter View.
+*   **Narration (`narration`)**: Always write natural spoken full sentences for TTS/MP4.
 *   The slide id is the kebab-case folder name (`q2-roadmap`, `amos-chapter-4`).
 
 ## 3. 기술 정본 (References)

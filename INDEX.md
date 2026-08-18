@@ -93,7 +93,7 @@ gws/(Google Workspace 하위 스킬 98개)는 외부 유래 묶음으로 본 인
 | econ-redteam | active | A | Adversarially attacks economic policy proposals (ex-ante) and empirical econometric work (… |
 | gn-voice | — | B | AI가 쓴 한국어 글을 저자 본인 문체로 재작성하는 개인 전용 윤문 스킬. 코퍼스 144건(threads+답글+브런치)에서 증류한 장르 팩(chat/reply/e… |
 | hatch | active | A | Create or manage a Hatch lifecycle workspace when a project needs a private workbench, a p… |
-| html-slide-presenter | active | A | Generates a synchronized dual-window HTML presentation deck (fullscreen main slides with c… |
+| html-slide-presenter | active | A | Generates a synchronized HTML presentation suite with on-screen QR code modal and mobile t… |
 | hwp-pages-convert | active | A | Converts HWP/HWPX and Apple Pages (.pages) files to clean Markdown (.md) documents, saniti… |
 | slash-auto-essay | — | C | 주제와 학년을 받아 지문·assessment package·검수·교안·PDF를 순서대로 생성하는 오케스트레이터입니다. |
 | slash-essay-qgen | — | C | 지문과 학년을 분석해 적응형 영어 서술형 assessment package를 생성하고 결정론적 검증까지 수행합니다. |

@@ -110,8 +110,10 @@ For Obsidian notes, support common syntax:
 8. Use Korean-friendly defaults when the source note or user request is Korean:
    - `lang: 'ko'` should be present in `open-slide.config.ts` already; do not edit it from this skill.
    - font stack: `"Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif`.
-   - use `wordBreak: 'keep-all'`, `overflowWrap: 'anywhere'`, and line-height >= 1.35 for body copy.
-9. Self-review with `slide`.
+9. **Always emit both `notes` and `narration` arrays**:
+   - **`export const notes = […]`**: Bullet-pointed speaker notes (`•`, `-`, `1.`) for Presenter View so the speaker can glance and present naturally.
+   - **`export const narration = […]`**: Natural spoken full sentences (30–80 words, no bullet fragments) for Audio Studio TTS and MP4 export.
+10. Self-review with `slide`.
 
 ## AI-generated images
 

@@ -33,7 +33,7 @@
 | clear-korean-writer | A | writing | 60 | — |
 | code-simplifier | A | dev-tools | 44 | — |
 | continuous-learner | A | utilities | 42 | — |
-| create-slide-from-markdown | A | media | 146 | — |
+| create-slide-from-markdown | A | media | 148 | — |
 | create-slide-image-prompts | A | media | 101 | — |
 | crossref-journal-searcher | A | academic-search | 42 | — |
 | deep-research | A | uncategorized | 118 | — |
@@ -50,7 +50,7 @@
 | google-scholar-semantic | A | academic-search | 118 | — |
 | grafeo-connector | A | utilities | 66 | — |
 | hatch 🔗 | A | uncategorized | 135 | — |
-| html-slide-presenter | A | uncategorized | 75 | — |
+| html-slide-presenter | A | uncategorized | 89 | — |
 | hwp-pages-convert | A | uncategorized | 56 | — |
 | insane-search | A | dev-tools | 81 | — |
 | ixtheo-searcher | A | academic-search | 42 | — |
@@ -82,7 +82,7 @@
 | semantic-scholar | A | academic-search | 50 | — |
 | sermon-insight | A | theology | 50 | — |
 | slash-criticalthink | A | writing | 56 | — |
-| slide | A | media | 115 | — |
+| slide | A | media | 130 | — |
 | sobeom-illustrations | A | uncategorized | 84 | — |
 | stealth-browser | A | dev-tools | 53 | — |
 | tawp | A | academic-search | 116 | — |
