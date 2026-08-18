@@ -28,7 +28,7 @@ status: active
 # ✂️ Obsidian Web Clipper 1.0
 
 ## 1. Overview
-사용자가 제공한 URL의 웹페이지 콘텐츠를 `read_url_content` (또는 기타 스크래핑 도구)를 통해 추출하고, 불필요한 UI 요소를 제거한 뒤 깨끗한 마크다운(Markdown)으로 정제하여 로컬 Obsidian Vault(예: `MS_Brain.nosync`의 Inbox 또는 지정된 Clippings 폴더)에 바로 저장하는 스킬입니다.
+사용자가 제공한 URL의 웹페이지 콘텐츠를 `read_url_content` (또는 기타 스크래핑 도구)를 통해 추출하고, 불필요한 UI 요소를 제거한 뒤 깨끗한 마크다운(Markdown)으로 정제하여 로컬 Obsidian Vault(예: `MS_Library.nosync`의 Inbox 또는 지정된 Clippings 폴더)에 바로 저장하는 스킬입니다.
 
 이 스킬은 **공식 Obsidian Web Clipper Extension**의 로컬 에이전트 버전(Local Agent Edition) 역할을 수행하며, 브라우저 확장 프로그램 없이도 대화형 에이전트가 직접 웹 스크랩 및 파일 생성을 처리할 수 있게 합니다.
 
@@ -59,7 +59,7 @@ status: active
 - 파일명(Note name)은 보통 `{Page_Title}.md` 형식으로 안전하게 생성합니다(특수문자 제거).
 
 ### Phase 4: SAVE TO VAULT (볼트에 저장)
-- 대장이 별도로 지정하지 않은 경우, 기본 저장소(예: `~/Desktop/MS_Brain.nosync/Clippings/` 또는 대장이 지정한 Clipping 디렉토리)에 `write_to_file` 도구를 사용해 `.md` 파일을 생성합니다.
+- 대장이 별도로 지정하지 않은 경우, 기본 저장소(예: `~/Desktop/MS_Library.nosync/Clippings/` 또는 대장이 지정한 Clipping 디렉토리)에 `write_to_file` 도구를 사용해 `.md` 파일을 생성합니다.
 - 작업 완료 시 생성된 파일 경로와 추출 요약본을 대장에게 보고합니다.
 
 ## 3. Reference Links

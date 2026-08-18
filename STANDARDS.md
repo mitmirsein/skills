@@ -84,7 +84,7 @@ description: >
 | Python | `Path(__file__).resolve().parents[N]` 앵커링, 또는 `Path.home() / "Desktop/..."` |
 | Shell | `"$HOME/Desktop/..."` |
 | JSON 설정 | `~/...` 표기 후 읽는 쪽에서 `expanduser` |
-| 심링크 | **상대 경로만** (예: `../../MS_Brain.nosync/.skills/wiki`) |
+| 심링크 | **상대 경로만** (예: `../../MS_Thoughts.nosync/.skills/wiki`) |
 
 - venv: 스킬/저장소 트리 안에 두지 않는다. 필요 시 머신별 분리(`.venv-m1`,
   `.venv-intel`)와 `.stignore` 등록 후 사용 (워크스페이스 헌법 준수).

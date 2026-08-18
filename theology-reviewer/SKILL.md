@@ -40,7 +40,7 @@ status: active
 
 > **스킬(Skill)**: ARC v4.0 오케스트레이터. 언제, 무엇을, 어떤 순서로 실행할지 결정.  
 > **프로젝트(Project)**: 도메인 지식 엔진. 프롬프트·라이브러리·설정을 보유.
-> **범위 제외**: `MS_Brain.nosync/500 Parrehsia/parrehsia` 프론트엔드는 자동 연결 대상이 아니다. 리뷰 산출물은 기본적으로 `MS_Brain.nosync/000 System/Inbox/Review_Reports`와 `Evidence`에 저장한다.
+> **범위 제외**: `MS_Library.nosync/500 Parrehsia/parrehsia` 프론트엔드는 자동 연결 대상이 아니다. 리뷰 산출물은 기본적으로 `MS_Thoughts.nosync/000 System/Inbox/Review_Reports`와 `Evidence`에 저장한다.
 
 ```
 [theology-reviewer skill]          [easy-review-system project]
@@ -68,7 +68,7 @@ status: active
 - **자동**: QuerySet 생성 → Semantic Scholar API + Google Scholar Labs + google-scholar-quick + IxTheo + Crossref + KCI + RISS → EvidencePack 저장
 - **Labs 규약**: `google-scholar-semantic`이 `tre_terms.csv` 기반 독일어/영어/고전어 쿼리 확장, 40초 Wait Protocol, 세션당 최대 4쿼리, `--citation-depth all`, JSONL 변환을 수행
 - **KCI/RISS 규약**: 한국학술 검색 효율을 극대화하기 위해 문장형 의문문에서 의문사/조사 등의 불용어를 정제한 뒤 파편화된 키워드로 자동 우회 쿼리 수행
-- **산출물**: `EvidencePack.json`, `QuerySet.json`, `ToolLog.json` → `MS_Brain.nosync/000 System/Inbox/Evidence/`
+- **산출물**: `EvidencePack.json`, `QuerySet.json`, `ToolLog.json` → `MS_Thoughts.nosync/000 System/Inbox/Evidence/`
 
 ### Phase 1: Unified Review (Analysis)
 - **실행**: `scripts/review_engine.py [논문_파일] --phase 1`

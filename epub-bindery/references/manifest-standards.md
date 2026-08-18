@@ -11,7 +11,7 @@ date: "YYYY-MM-DD"
 language: "ko-KR"
 identifier: "urn:uuid:..." # 선택 사항
 rights: "ⓒ 2026. All rights reserved."
-publisher: "MS_Brain.nosync Publishing"
+publisher: "MS_Library.nosync Publishing"
 tags: ["Theology", "Meditation"]
 cover-image: "cover.jpg"
 stylesheet: "epub_style.css"

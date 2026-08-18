@@ -1,5 +1,5 @@
 {
-  "inventory_path": "~/Desktop/MS_Brain.nosync/000 System/Digital_Library_Inventory.md",
+  "inventory_path": "~/Desktop/MS_Library.nosync/000 System/Digital_Library_Inventory.md",
   "default_category": "신학/성서신학/데이터베이스",
   "scraping_engine": "read_url_content",
   "duplicate_check": true

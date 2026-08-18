@@ -10,7 +10,7 @@ version: 3.1.1
 codename: Skill Standard v3.1
 author: MS_Dev
 sources_of_truth:
-  - "~/Desktop/MS_Brain.nosync/000 System/Digital_Library_Inventory.md"
+  - "~/Desktop/MS_Library.nosync/000 System/Digital_Library_Inventory.md"
 triggers:
   - "#curate [URL]"
   - "#등록 [URL]"

@@ -6,7 +6,7 @@
     "boundary_principle": "스킬은 이 파일의 engine_root를 통해서만 프로젝트 파일에 접근한다. SKILL.md에 경로를 하드코딩하지 않는다."
   },
   "dev_root": "~/Desktop/MS_Dev.nosync",
-  "brain_root": "~/Desktop/MS_Brain.nosync",
+  "brain_root": "~/Desktop/MS_Thoughts.nosync",
   "engine_root": "~/Desktop/MS_Dev.nosync/projects/easy-review-system",
   "default_entry_point": "prompts/unified_review.json.md",
   "special_entry_point":  "prompts/critical_review.json.md",
@@ -80,9 +80,9 @@
     }
   },
   "output": {
-    "review_reports": "~/Desktop/MS_Brain.nosync/000 System/Inbox/Review_Reports",
-    "evidence_packs":  "~/Desktop/MS_Brain.nosync/000 System/Inbox/Evidence",
-    "session_logs":    "~/Desktop/MS_Brain.nosync/900 Archive/Review_Logs",
+    "review_reports": "~/Desktop/MS_Thoughts.nosync/000 System/Inbox/Review_Reports",
+    "evidence_packs":  "~/Desktop/MS_Thoughts.nosync/000 System/Inbox/Evidence",
+    "session_logs":    "~/Desktop/MS_Thoughts.nosync/900 Archive/Review_Logs",
     "format": "markdown"
   },
   "guardrails": {

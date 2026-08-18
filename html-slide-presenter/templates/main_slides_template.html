@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-paper: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --text-ink: #0F172A;
+      --text-muted: #64748B;
+      --text-dim: #94A3B8;
+      
+      --accent-primary: #C2410C;
+      --accent-primary-text: #9A3412;
+      --accent-primary-light: #FFF7ED;
+      --accent-primary-border: #FFEDD5;
+
+      --accent-green: #047857;
+      --accent-green-text: #065F46;
+      --accent-green-light: #F0FDF4;
+      --accent-green-border: #DCFCE7;
+
+      --accent-gold: #B45309;
+      --accent-gold-text: #92400E;
+      --accent-gold-light: #FFFBEB;
+      --accent-gold-border: #FEF3C7;
+
+      --border-col: #E2E8F0;
+      --border-dark: #CBD5E1;
+      
+      --font-display: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', Batang, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: var(--font-serif);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: text;
+      -webkit-user-select: text;
+      word-break: keep-all;
+    }
+
+    /* Presentation Screen Shell */
+    .deck-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg-paper);
+      overflow: hidden;
+    }
+
+    /* Drawing Overlay Canvas */
+    #drawCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 50;
+      pointer-events: none;
+    }
+    #drawCanvas.active-draw {
+      pointer-events: auto;
+      cursor: crosshair;
+    }
+    #drawCanvas.active-laser {
+      pointer-events: auto;
+      cursor: none;
+    }
+
+    /* Floating Tool Bar */
+    .floating-tool-bar {
+      position: absolute;
+      bottom: 14px;
+      right: 18px;
+      display: flex;
+      gap: 3px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-col);
+      border-radius: 18px;
+      padding: 4px 8px;
+      z-index: 60;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+      opacity: 0.25;
+      transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .floating-tool-bar:hover, .floating-tool-bar.active {
+      opacity: 1;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    }
+    .tool-btn {
+      background: transparent;
+      border: none;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tool-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-ink);
+    }
+    .tool-btn.active {
+      background: var(--accent-primary-light);
+      color: var(--accent-primary-text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* Slide Item */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 4.5% 6.5%;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      background: var(--bg-paper);
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid var(--border-col);
+      padding-bottom: 1.8%;
+      margin-bottom: 2%;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .eyebrow-tag {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 1.25vw, 20px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--accent-primary-text);
+    }
+
+    .header-divider {
+      color: var(--border-col);
+      font-size: clamp(14px, 1.2vw, 18px);
+    }
+
+    .header-title {
+      font-family: var(--font-display);
+      font-size: clamp(15px, 1.35vw, 22px);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .header-page {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 1.2vw, 18px);
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    h1.display-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.6vw, 76px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: var(--text-ink);
+      margin-bottom: 2.5%;
+    }
+
+    h2.slide-heading {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.2vw, 50px);
+      font-weight: 800;
+      line-height: 1.24;
+      margin-bottom: 1%;
+    }
+
+    p.sub-desc {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 1.45vw, 24px);
+      color: var(--text-muted);
+      margin-bottom: 3%;
+    }
+
+    .highlight-primary { color: var(--accent-primary-text); }
+    .highlight-green { color: var(--accent-green-text); }
+    .highlight-gold { color: var(--accent-gold-text); }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.8vw, 28px);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(16px, 2.5vw, 40px);
+      align-items: center;
+    }
+
+    .card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-col);
+      border-radius: 12px;
+      padding: clamp(16px, 1.8vw, 28px);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+
+    .card-icon {
+      font-size: clamp(24px, 2.5vw, 38px);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 1.8vw, 28px);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .card-subtitle {
+      font-family: var(--font-display);
+      font-size: clamp(13px, 1.15vw, 18px);
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .card-text {
+      font-family: var(--font-serif);
+      font-size: clamp(13px, 1.25vw, 20px);
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .quote-banner {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-col);
+      border-radius: 12px;
+      padding: clamp(14px, 1.6vw, 22px) clamp(18px, 2vw, 28px);
+      font-family: var(--font-serif);
+      font-size: clamp(15px, 1.5vw, 24px);
+      line-height: 1.6;
+      color: var(--text-ink);
+      font-weight: 600;
+      margin-bottom: 2%;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-container" id="deckContainer">
+    <!-- Overlay Drawing Canvas -->
+    <canvas id="drawCanvas"></canvas>
+
+    <!-- Floating Presentation Tool Bar -->
+    <div class="floating-tool-bar" id="floatingToolBar">
+      <button class="tool-btn active" id="btnModeNone" title="선택 모드 (ESC)">🖱️ 선택</button>
+      <button class="tool-btn" id="btnModeHighlighter" title="형광펜 (H)">🖍️ 형광펜</button>
+      <button class="tool-btn" id="btnModePen" title="펜 필기 (P)">✏️ 펜</button>
+      <button class="tool-btn" id="btnModeLaser" title="레이저 포인터 (L)">🔴 레이저</button>
+      <button class="tool-btn" id="btnClearCanvas" title="판서 지우기 (C)">🧹 지우기</button>
+      <button class="tool-btn" id="btnToggleFullscreen" title="전체화면 토글 (F)">⛶ 전체화면</button>
+      <button class="tool-btn" id="btnOpenPresenter" title="발표자 전용 창 열기 (W)" style="background:var(--accent-primary-light); color:var(--accent-primary-text); font-weight:800; border:1px solid var(--accent-primary-border);">🎙️ 발표자창</button>
+    </div>
+
+    <!-- Slides Injection -->
+{{SLIDES_HTML}}
+  </div>
+
+  <script>
+    const speeches = {{SPEECHES_JSON}};
+    const slideTitles = {{TITLES_JSON}};
+    const SYNC_CHANNEL_NAME = '{{CHANNEL_NAME}}';
+    const PRESENTER_FILE = '{{PRESENTER_HTML_FILENAME}}';
+
+    let currentSlide = 1;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const deckContainer = document.getElementById('deckContainer');
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let toolMode = 'none';
+    let isDrawing = false;
+    let currentStroke = [];
+    let laserX = -100;
+    let laserY = -100;
+    let animFrameId = null;
+    const slideBuffers = {};
+
+    function getOrCreateBuffer(slideIndex) {
+      if (!slideBuffers[slideIndex]) {
+        const off = document.createElement('canvas');
+        const rect = deckContainer.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        off.width = rect.width * dpr;
+        off.height = rect.height * dpr;
+        slideBuffers[slideIndex] = off;
+      }
+      return slideBuffers[slideIndex];
+    }
+
+    function resizeCanvas() {
+      const rect = deckContainer.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+
+      for (const idx in slideBuffers) {
+        const buf = slideBuffers[idx];
+        const temp = document.createElement('canvas');
+        temp.width = buf.width;
+        temp.height = buf.height;
+        temp.getContext('2d').drawImage(buf, 0, 0);
+
+        buf.width = rect.width * dpr;
+        buf.height = rect.height * dpr;
+        buf.getContext('2d').drawImage(temp, 0, 0, buf.width, buf.height);
+      }
+      renderCanvas();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    function setToolMode(mode) {
+      toolMode = mode;
+      canvas.classList.remove('active-draw', 'active-laser');
+      document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+
+      if (mode === 'highlighter') {
+        canvas.classList.add('active-draw');
+        document.getElementById('btnModeHighlighter')?.classList.add('active');
+      } else if (mode === 'pen') {
+        canvas.classList.add('active-draw');
+        document.getElementById('btnModePen')?.classList.add('active');
+      } else if (mode === 'laser') {
+        canvas.classList.add('active-laser');
+        document.getElementById('btnModeLaser')?.classList.add('active');
+        startLaserLoop();
+      } else {
+        document.getElementById('btnModeNone')?.classList.add('active');
+      }
+    }
+
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (toolMode !== 'pen' && toolMode !== 'highlighter') return;
+      isDrawing = true;
+      const coords = getCanvasCoords(e);
+      currentStroke = [{ x: coords.x, y: coords.y, mode: toolMode }];
+      renderCanvas();
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      const coords = getCanvasCoords(e);
+      if (toolMode === 'laser') {
+        laserX = coords.x;
+        laserY = coords.y;
+      }
+      if (!isDrawing || (toolMode !== 'pen' && toolMode !== 'highlighter')) return;
+      currentStroke.push({ x: coords.x, y: coords.y, mode: toolMode });
+      renderCanvas();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDrawing) {
+        isDrawing = false;
+        commitCurrentStroke();
+        currentStroke = [];
+        renderCanvas();
+      }
+    });
+
+    function commitCurrentStroke() {
+      if (currentStroke.length === 0) return;
+      const buf = getOrCreateBuffer(currentSlide);
+      const bCtx = buf.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      bCtx.save();
+      bCtx.scale(dpr, dpr);
+      drawPathOnContext(bCtx, currentStroke);
+      bCtx.restore();
+    }
+
+    function drawPathOnContext(targetCtx, strokePoints) {
+      if (strokePoints.length < 2) return;
+      const mode = strokePoints[0].mode;
+
+      targetCtx.save();
+      if (mode === 'highlighter') {
+        targetCtx.globalCompositeOperation = 'multiply';
+        targetCtx.strokeStyle = 'rgba(255, 230, 80, 0.45)';
+        targetCtx.lineWidth = 26;
+        targetCtx.lineCap = 'round';
+        targetCtx.lineJoin = 'round';
+      } else if (mode === 'pen') {
+        targetCtx.globalCompositeOperation = 'source-over';
+        targetCtx.strokeStyle = '#D9381E';
+        targetCtx.lineWidth = 3.5;
+        targetCtx.lineCap = 'round';
+        targetCtx.lineJoin = 'round';
+      }
+
+      targetCtx.beginPath();
+      targetCtx.moveTo(strokePoints[0].x, strokePoints[0].y);
+
+      for (let i = 1; i < strokePoints.length - 1; i++) {
+        const xc = (strokePoints[i].x + strokePoints[i + 1].x) / 2;
+        const yc = (strokePoints[i].y + strokePoints[i + 1].y) / 2;
+        targetCtx.quadraticCurveTo(strokePoints[i].x, strokePoints[i].y, xc, yc);
+      }
+
+      const last = strokePoints[strokePoints.length - 1];
+      targetCtx.lineTo(last.x, last.y);
+      targetCtx.stroke();
+      targetCtx.restore();
+    }
+
+    function renderCanvas() {
+      const rect = deckContainer.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      const buf = slideBuffers[currentSlide];
+      if (buf) ctx.drawImage(buf, 0, 0, rect.width, rect.height);
+      if (currentStroke.length > 1) drawPathOnContext(ctx, currentStroke);
+    }
+
+    function clearCanvas() {
+      const buf = slideBuffers[currentSlide];
+      if (buf) {
+        const bCtx = buf.getContext('2d');
+        bCtx.clearRect(0, 0, buf.width, buf.height);
+      }
+      currentStroke = [];
+      renderCanvas();
+    }
+
+    function startLaserLoop() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      function renderLaser() {
+        if (toolMode === 'laser' && laserX > 0 && laserY > 0) {
+          renderCanvas();
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(laserX, laserY, 14, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 50, 50, 0.35)';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(laserX, laserY, 6, 0, Math.PI * 2);
+          ctx.fillStyle = '#FF1A1A';
+          ctx.shadowColor = '#FF0000';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.restore();
+        }
+        if (toolMode === 'laser') animFrameId = requestAnimationFrame(renderLaser);
+      }
+      renderLaser();
+    }
+
+    const syncChannel = new BroadcastChannel(SYNC_CHANNEL_NAME);
+    let presenterWindow = null;
+
+    syncChannel.onmessage = (e) => {
+      if (e.data && e.data.type === 'GOTO_SLIDE') {
+        showSlide(e.data.slide, false);
+      } else if (e.data && e.data.type === 'REQUEST_STATE') {
+        broadcastCurrentState();
+      }
+    };
+
+    function broadcastCurrentState() {
+      syncChannel.postMessage({
+        type: 'SLIDE_CHANGE',
+        currentSlide: currentSlide,
+        totalSlides: totalSlides,
+        title: slideTitles[currentSlide - 1] || '',
+        nextTitle: slideTitles[currentSlide] || '(마지막 슬라이드입니다)',
+        speech: speeches[currentSlide - 1] || '',
+        nextSpeech: speeches[currentSlide] || ''
+      });
+      try {
+        localStorage.setItem(SYNC_CHANNEL_NAME + '_current', currentSlide);
+      } catch(e){}
+    }
+
+    function openPresenterWindow() {
+      if (presenterWindow && !presenterWindow.closed) {
+        presenterWindow.focus();
+        broadcastCurrentState();
+        return;
+      }
+      presenterWindow = window.open(PRESENTER_FILE, 'DualPresenterView', 'width=1100,height=750,menubar=no,toolbar=no,location=no,status=no');
+      if (!presenterWindow) {
+        alert('팝업이 차단되었습니다. 브라우저 주소창에서 팝업을 허용해 주세요.');
+        return;
+      }
+      setTimeout(broadcastCurrentState, 300);
+    }
+
+    function showSlide(index, broadcast = true) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      slides.forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) slide.classList.add('active');
+        else slide.classList.remove('active');
+      });
+
+      renderCanvas();
+      if (broadcast) broadcastCurrentState();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) showSlide(currentSlide - 1);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prevSlide();
+      } else if (key === 'f') {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (key === 'w') {
+        e.preventDefault();
+        openPresenterWindow();
+      } else if (key === 'h') {
+        setToolMode(toolMode === 'highlighter' ? 'none' : 'highlighter');
+      } else if (key === 'p') {
+        setToolMode(toolMode === 'pen' ? 'none' : 'pen');
+      } else if (key === 'l') {
+        setToolMode(toolMode === 'laser' ? 'none' : 'laser');
+      } else if (key === 'c') {
+        clearCanvas();
+      } else if (e.key === 'Escape') {
+        setToolMode('none');
+      } else if (e.key >= '1' && e.key <= '9') {
+        showSlide(parseInt(e.key));
+      }
+    });
+
+    document.getElementById('btnModeNone')?.addEventListener('click', () => setToolMode('none'));
+    document.getElementById('btnModeHighlighter')?.addEventListener('click', () => setToolMode(toolMode === 'highlighter' ? 'none' : 'highlighter'));
+    document.getElementById('btnModePen')?.addEventListener('click', () => setToolMode(toolMode === 'pen' ? 'none' : 'pen'));
+    document.getElementById('btnModeLaser')?.addEventListener('click', () => setToolMode(toolMode === 'laser' ? 'none' : 'laser'));
+    document.getElementById('btnClearCanvas')?.addEventListener('click', clearCanvas);
+    document.getElementById('btnToggleFullscreen')?.addEventListener('click', toggleFullscreen);
+    document.getElementById('btnOpenPresenter')?.addEventListener('click', openPresenterWindow);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === SYNC_CHANNEL_NAME + '_current' && e.newValue) {
+        showSlide(parseInt(e.newValue), false);
+      }
+    });
+
+    setTimeout(() => {
+      resizeCanvas();
+      showSlide(1);
+    }, 100);
+  </script>
+</body>
+</html>

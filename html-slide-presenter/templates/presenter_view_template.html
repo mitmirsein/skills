@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎙️ 발표자 모드 (Presenter View) · {{TITLE}}</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #141416;
+      --card-bg: #202024;
+      --border: #323238;
+      --text-main: #EDEDF0;
+      --text-muted: #9E9EA8;
+      --accent: #C2410C;
+      --green: #4EBA7C;
+      --blue: #4D96FF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: "Pretendard", system-ui, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: text;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: #1A1A1E;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .slide-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .timer-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFF;
+      background: #000;
+      padding: 4px 14px;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+    .clock-display {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 20px;
+      padding: 20px 24px;
+      flex: 1;
+      overflow: hidden;
+    }
+    .notes-panel {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    .font-btns {
+      display: flex;
+      gap: 6px;
+    }
+    .small-btn {
+      background: #2C2C32;
+      border: 1px solid var(--border);
+      color: #FFF;
+      padding: 2px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .small-btn:hover { background: #3E3E48; }
+    .speech-box {
+      flex: 1;
+      overflow-y: auto;
+      font-family: "Noto Serif KR", serif;
+      font-size: 22px;
+      line-height: 1.8;
+      color: #F0EDE6;
+      white-space: pre-wrap;
+      padding-right: 10px;
+    }
+    .speech-box::-webkit-scrollbar { width: 6px; }
+    .speech-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .current-title-card {
+      border-left: 4px solid var(--accent);
+    }
+    .current-slide-heading {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFF;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .next-slide-card {
+      border-left: 4px solid var(--green);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .next-slide-heading {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .next-speech-snippet {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      overflow-y: auto;
+      font-family: "Noto Serif KR", serif;
+    }
+    footer {
+      background: #1A1A1E;
+      border-top: 1.5px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-btn {
+      background: #2D2D34;
+      border: 1.5px solid var(--border);
+      color: #FFF;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
+    .jump-group {
+      display: flex;
+      gap: 6px;
+    }
+    .jump-btn {
+      background: #25252B;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .jump-btn.active {
+      background: var(--accent);
+      color: #FFF;
+      border-color: var(--accent);
+    }
+    .jump-btn:hover { color: #FFF; border-color: #555; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <span class="slide-badge" id="pSlideBadge">Slide 1 / {{TOTAL_SLIDES}}</span>
+      <span style="font-size:14px; font-weight:700; color:#888;">{{TITLE}}</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:20px;">
+      <span class="clock-display" id="pClock">00:00:00</span>
+      <div class="timer-container">
+        <span id="pTimer">00:00</span>
+        <button class="small-btn" id="pTimerBtn" title="타이머 일시정지/재생" style="padding:2px 6px;">⏸️</button>
+        <button class="small-btn" id="pTimerReset" title="타이머 초기화" style="padding:2px 6px;">🔄</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <div class="notes-panel">
+      <div class="panel-header">
+        <span class="panel-title">🗒️ 이번 슬라이드 발표 대본 (Speaker Notes)</span>
+        <div class="font-btns">
+          <button class="small-btn" id="pFontDown">가-</button>
+          <button class="small-btn" id="pFontUp">가+</button>
+        </div>
+      </div>
+      <div class="speech-box" id="pSpeechBox">대본을 불러오는 중...</div>
+    </div>
+
+    <div class="side-panel">
+      <div class="card current-title-card">
+        <span style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">현재 화면</span>
+        <div class="current-slide-heading" id="pCurrentTitle">-</div>
+      </div>
+
+      <div class="card next-slide-card">
+        <span style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">다음 슬라이드 미리보기</span>
+        <div class="next-slide-heading" id="pNextTitle">-</div>
+        <div class="next-speech-snippet" id="pNextSnippet">-</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <button class="nav-btn" id="pPrevBtn">◀ 이전 슬라이드 (←)</button>
+    <div class="jump-group" id="pJumpGroup"></div>
+    <button class="nav-btn" id="pNextBtn" style="background:var(--accent); border-color:var(--accent);">다음 슬라이드 ▶ (Space / →)</button>
+  </footer>
+
+  <script>
+    const speeches = {{SPEECHES_JSON}};
+    const slideTitles = {{TITLES_JSON}};
+    const SYNC_CHANNEL_NAME = '{{CHANNEL_NAME}}';
+
+    const sync = new BroadcastChannel(SYNC_CHANNEL_NAME);
+    let pCurrentSlide = 1;
+    let pTotalSlides = slideTitles.length;
+    let fontSize = 22;
+
+    function renderPresenterUI(index) {
+      if (index < 1) index = 1;
+      if (index > pTotalSlides) index = pTotalSlides;
+      pCurrentSlide = index;
+
+      document.getElementById('pSlideBadge').textContent = `Slide ${pCurrentSlide} / ${pTotalSlides}`;
+      document.getElementById('pCurrentTitle').textContent = slideTitles[pCurrentSlide - 1] || '';
+      document.getElementById('pNextTitle').textContent = slideTitles[pCurrentSlide] || '(마지막 슬라이드입니다)';
+      document.getElementById('pSpeechBox').textContent = speeches[pCurrentSlide - 1] || '';
+      
+      const nextSp = speeches[pCurrentSlide] || '';
+      document.getElementById('pNextSnippet').textContent = nextSp ? (nextSp.slice(0, 180) + (nextSp.length > 180 ? '...' : '')) : '-';
+
+      document.querySelectorAll('.jump-btn').forEach((b, idx) => {
+        if (idx + 1 === pCurrentSlide) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('pClock').textContent = now.toLocaleTimeString('ko-KR', { hour12: false });
+    }, 1000);
+    const now = new Date();
+    document.getElementById('pClock').textContent = now.toLocaleTimeString('ko-KR', { hour12: false });
+
+    let timerSec = 0;
+    let timerRunning = true;
+    const timerEl = document.getElementById('pTimer');
+    setInterval(() => {
+      if (timerRunning) {
+        timerSec++;
+        const mins = String(Math.floor(timerSec / 60)).padStart(2, '0');
+        const secs = String(timerSec % 60).padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs}`;
+      }
+    }, 1000);
+
+    document.getElementById('pTimerBtn').onclick = () => {
+      timerRunning = !timerRunning;
+      document.getElementById('pTimerBtn').textContent = timerRunning ? '⏸️' : '▶️';
+    };
+    document.getElementById('pTimerReset').onclick = () => {
+      timerSec = 0;
+      timerEl.textContent = '00:00';
+    };
+
+    document.getElementById('pFontUp').onclick = () => {
+      if (fontSize < 40) fontSize += 2;
+      document.getElementById('pSpeechBox').style.fontSize = fontSize + 'px';
+    };
+    document.getElementById('pFontDown').onclick = () => {
+      if (fontSize > 14) fontSize -= 2;
+      document.getElementById('pSpeechBox').style.fontSize = fontSize + 'px';
+    };
+
+    function goToSlide(target) {
+      if (target < 1) target = 1;
+      if (target > pTotalSlides) target = pTotalSlides;
+      renderPresenterUI(target);
+      sync.postMessage({ type: 'GOTO_SLIDE', slide: target });
+      try {
+        localStorage.setItem(SYNC_CHANNEL_NAME + '_current', target);
+      } catch(e){}
+    }
+
+    document.getElementById('pNextBtn').onclick = () => goToSlide(pCurrentSlide + 1);
+    document.getElementById('pPrevBtn').onclick = () => goToSlide(pCurrentSlide - 1);
+
+    const jumpGroup = document.getElementById('pJumpGroup');
+    jumpGroup.innerHTML = '';
+    for (let i = 1; i <= pTotalSlides; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'jump-btn' + (i === 1 ? ' active' : '');
+      btn.id = 'pJump' + i;
+      btn.textContent = i;
+      btn.onclick = () => goToSlide(i);
+      jumpGroup.appendChild(btn);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') {
+        e.preventDefault();
+        goToSlide(pCurrentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        goToSlide(pCurrentSlide - 1);
+      } else if (e.key >= '1' && e.key <= '9') {
+        goToSlide(parseInt(e.key));
+      }
+    });
+
+    sync.onmessage = (e) => {
+      if (e.data && e.data.type === 'SLIDE_CHANGE') {
+        renderPresenterUI(e.data.currentSlide);
+      }
+    };
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === SYNC_CHANNEL_NAME + '_current' && e.newValue) {
+        renderPresenterUI(parseInt(e.newValue));
+      }
+    });
+
+    const saved = localStorage.getItem(SYNC_CHANNEL_NAME + '_current');
+    renderPresenterUI(saved ? parseInt(saved) : 1);
+    sync.postMessage({ type: 'REQUEST_STATE' });
+  </script>
+</body>
+</html>

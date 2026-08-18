@@ -16,4 +16,4 @@
 - `theology-council`을 소집하여 성서, 역사, 조직, 실천신학의 다각적 관점을 통합한 종합 리포트를 제공합니다.
 
 ## 💾 Session Archival
-세션 종료 시 `MS_Brain.nosync/010 Inbox/`에 `research_session_{date}.md` 형식으로 대화 내용을 자동 저장합니다.
+세션 종료 시 `MS_Thoughts.nosync/010 Inbox/`에 `research_session_{date}.md` 형식으로 대화 내용을 자동 저장합니다.

@@ -40,18 +40,36 @@ class IxTheoSearcher:
             return self._cookie_token
 
         if self.debug:
-            print("[*] Solving cryptographic browser verification challenge...", file=sys.stderr)
-            
-        difficulty = "0000"
-        nonce = str(uuid.uuid4())
-        ts = int(time.time())
-        
+            print("[*] Fetching challenge parameters from IxTheo...", file=sys.stderr)
+
+        # First request to get the challenge
+        resp = self.session.get(f"{IXTHEO_BASE_URL}/", timeout=15)
+        if "pow_token=" not in resp.text and "DIFFICULTY_BITS" not in resp.text:
+            # Maybe already bypassed or not required
+            return ""
+
+        diff_match = re.search(r'DIFFICULTY_BITS\s*=\s*(\d+)', resp.text)
+        nonce_match = re.search(r'nonce\s*=\s*["\']([a-f0-9]+)["\']', resp.text)
+        ts_match = re.search(r'TS\s*=\s*["\'](\d+)["\']', resp.text)
+
+        if not (diff_match and nonce_match and ts_match):
+            return ""
+
+        diff_bits = int(diff_match.group(1))
+        nonce = nonce_match.group(1)
+        ts = ts_match.group(1)
+
+        if self.debug:
+            print(f"[*] Solving PoW (diff={diff_bits} bits, nonce={nonce})...", file=sys.stderr)
+
         i = 0
         t0 = time.perf_counter()
         while True:
-            msg = f"{nonce}{ts}{i}".encode("utf-8")
-            hex_hash = hashlib.sha256(msg).hexdigest()
-            if hex_hash.startswith(difficulty):
+            msg = f"{nonce}{i}".encode("utf-8")
+            digest = hashlib.sha256(msg).digest()
+            val = (digest[0] << 16) | (digest[1] << 8) | digest[2]
+            lz = 24 - val.bit_length() if val > 0 else 24
+            if lz >= diff_bits:
                 token = f"{nonce}:{ts}:{i}"
                 self._cookie_token = token
                 if self.debug:
@@ -63,7 +81,8 @@ class IxTheoSearcher:
     def get_authorized_session(self) -> requests.Session:
         """Applies the resolved PoW token to the session cookies"""
         token = self.solve_pow()
-        self.session.cookies.set("pow_token", token, domain="ixtheo.de", path="/")
+        if token:
+            self.session.cookies.set("pow_token", token, domain="ixtheo.de", path="/")
         return self.session
 
     def search_records(self, query: str, limit: int = 20) -> List[Dict[str, Any]]:

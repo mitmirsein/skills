@@ -293,16 +293,21 @@ def format_markdown(query: str, results: list[dict], audit_stats: dict) -> str:
         abstract = r.get("abstract", "")
         affs = r.get("affiliations", [])
         journal = r.get("journal", "")
-        if abstract or affs or journal:
+        publisher = r.get("publisher", "")
+        if abstract or affs or journal or publisher:
             lines.append(f"### {i+1}. {r.get('title', '')}")
-            if journal:
-                lines.append(f"**학술지:** {journal}")
+            if journal or publisher:
+                pub_str = f" ({publisher})" if publisher else ""
+                lines.append(f"**학술지 및 발행기관:** {journal}{pub_str}")
             if affs:
                 lines.append(f"**소속기관:** {', '.join(affs)}")
             lines.append("")
             if abstract:
                 lines.append(f"> {abstract[:400]}{'...' if len(abstract) > 400 else ''}")
             lines.append("")
+
+    lines.append("> [!TIP]")
+    lines.append("> **학회 홈페이지 원문 다운로드 팁**: KCI 포털에서 직접 원문 다운로드가 차단되거나 상업 유통(DBpia/KISS)으로 연동되는 국내 학술지 논문은 해당 학술지를 발행하는 학회 공식 홈페이지(원문자료실/과월호) 또는 학회 전용 JAMS 포털(`*.jams.or.kr`)에서 대부분 무료 Open Access로 PDF 다운로드가 가능합니다.")
 
     return "\n".join(lines)
 

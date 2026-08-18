@@ -66,7 +66,7 @@ def _cfg_path(value: str | None, fallback: Path) -> Path:
 
 # --- 경로 설정 (master_config.json.md 참조) ---
 PROJECT_ROOT = _cfg_path(SKILL_CONFIG.get("engine_root"), DEV_ROOT / "projects" / "easy-review-system")
-BRAIN_ROOT   = _cfg_path(SKILL_CONFIG.get("brain_root"), Path(os.path.expanduser("~/Desktop/MS_Brain.nosync")))
+BRAIN_ROOT   = _cfg_path(SKILL_CONFIG.get("brain_root"), Path(os.path.expanduser("~/Desktop/MS_Thoughts.nosync")))
 
 S2_RUNNER = _cfg_path(
     S2_CFG.get("runner_path"),

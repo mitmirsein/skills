@@ -1,1 +1,1 @@
-../../MS_Brain.nosync/.skills/wiki
+../../MS_Thoughts.nosync/.skills/wiki

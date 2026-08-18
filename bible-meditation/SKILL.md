@@ -23,9 +23,9 @@ references_path: ./references
 
 ## ⛔ 격리 구역 (절대 준수 — 볼트 헌법)
 
-- `II-Sanctuary/200 Ministry/210 Meditation`은 **읽기 전용**. 이 스킬은 원본 묵상
+- `200 Ministry/210 Meditation` (`MS_Thoughts.nosync`)은 **읽기 전용**. 이 스킬은 원본 묵상
   노트를 수정·이동·삭제하지 않습니다.
-- 파생 산출물(완성 묵상글, 설교화)은 `220 Sermons` 또는 `600 Kerygma - Journals`로만
+- 파생 산출물(완성 묵상글, 설교화)은 `200 Ministry/220 Sermons` 또는 `Wiki/Lemmas`로만
   보냅니다 (사용자가 다른 위치를 지정하지 않는 한).
 
 ## Phase 0 — 가드레일

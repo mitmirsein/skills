@@ -39,7 +39,7 @@ references_path: ./references
   1. `defuddle parse <url> --md` 우선 사용 (노이즈 제거 본문 추출)
   2. YAML frontmatter 필수 생성: `created`, `source`, `tags`, `summary`, `author`
   3. 파일명: `YYYYMMDD-Title` 또는 학술 자료는 `Author-Year-Title`
-- 저장 위치: 기본 `~/Desktop/MS_Brain.nosync/000 System/Inbox/Raw/`
+- 저장 위치: 기본 `~/Desktop/MS_Library.nosync/000 System/Inbox/Raw/` 또는 `~/Desktop/MS_Library.nosync/Clippings/`
   (사용자 지정 시 해당 경로).
 
 ## Phase 2 — /organize (배치)

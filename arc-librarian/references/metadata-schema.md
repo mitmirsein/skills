@@ -1,6 +1,6 @@
 # ARC Librarian: YAML Metadata Schema
 
-MS_Brain.nosync 볼트 내 모든 지식 자산에 공통으로 적용되는 표준 YAML Frontmatter 규격입니다.
+MS_Library.nosync 및 MS_Thoughts.nosync 볼트 내 모든 지식 자산에 공통으로 적용되는 표준 YAML Frontmatter 규격입니다.
 
 ## 📄 Schema Definition
 ```yaml

@@ -33,4 +33,4 @@ tags:
 
 ## 3. 파일 생성 규칙
 - **File Name**: `{page_title}.md` (Windows/macOS 파일 시스템에서 금지된 특수문자 `\/:*?"<>|`는 반드시 공백이나 언더스코어로 치환).
-- **Directory**: 대장이 특별히 지정하지 않으면 기본적으로 `~/Desktop/MS_Brain.nosync/Clippings/` 또는 작업 지시에 명시된 폴더를 사용합니다.
+- **Directory**: 대장이 특별히 지정하지 않으면 기본적으로 `~/Desktop/MS_Library.nosync/Clippings/` 또는 작업 지시에 명시된 폴더를 사용합니다.

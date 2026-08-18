@@ -6,7 +6,7 @@
 1. **URI Encoding**: 파일 경로에 빈 칸이나 특수문자가 포함되므로 반드시 URL 인코딩을 수행합니다.
    - `ENCODED_PATH=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$FILEPATH")`
 2. **Advanced URI Call**: `open` 명령을 사용하여 Obsidian 앱에 플러그인 실행 신호를 보냅니다.
-   - `open "obsidian://advanced-uri?vault=MS_Brain.nosync&filepath=${ENCODED_PATH}&commandid=[명령ID]"`
+   - `open "obsidian://advanced-uri?vault=MS_Thoughts.nosync&filepath=${ENCODED_PATH}&commandid=[명령ID]"`
 3. **Wait & Capture**: 네트워크 업로드 및 클립보드 복사 시간을 위해 대기(`sleep 5`) 후 `pbpaste`로 URL을 확보합니다.
 4. **Metadata Update**: 획득한 URL을 노트의 `share_url` 속성(Properties)에 공식 CLI를 사용하여 기록합니다.
    - `obsidian property:set file="파일명" name="share_url" value="$URL" ...`

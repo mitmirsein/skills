@@ -37,7 +37,7 @@ mo clean             # Step 2: 실행
 - `node_modules` 제거 시 `package-lock.json`이 있는지 먼저 확인.
 - `.venv` 제거 시 이 머신에서 재생성 가능한지 확인 (Python 버전, 의존성).
 - Syncthing 동기화 경로에 있는 `.venv`는 삭제 전 특별 주의 (AGENTS.md 수칙).
-- `mo purge --paths`로 스캔 경로를 MS_Dev, MS_Brain 특화 설정 권장.
+- `mo purge --paths`로 스캔 경로를 MS_Dev, MS_Library, MS_Thoughts 특화 설정 권장.
 
 ### mo analyze
 - 외장 드라이브 포함: `mo analyze /Volumes`
@@ -71,4 +71,4 @@ mo uninstall            # 실행
 
 - `mo remove`는 Mole 자체를 제거하는 명령. 일반 청소 작업에 사용 금지.
 - `mo update --nightly`는 미검증 빌드이므로 안정적 환경에서는 사용 자제.
-- MS_Brain 볼트 내 `node_modules.nosync` 등 Syncthing 제외 경로는 purge 스캔에서 제외 권장.
+- MS_Library 및 MS_Thoughts 볼트 내 `node_modules.nosync` 등 Syncthing 제외 경로는 purge 스캔에서 제외 권장.

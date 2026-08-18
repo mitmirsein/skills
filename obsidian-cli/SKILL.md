@@ -35,7 +35,7 @@ Obsidian 앱의 인덱스, 링크 그래프, 메타데이터 캐시를 직접 �
 본 조작 전 **시스템 함정(Gotchas)**과 **앱 환경(Config)**을 먼저 점검합니다.
 
 ### Phase 0: Setup & Guardrail
-- **Verify CLI**: `which obsidian`으로 CLI 가용성을 확인하고, 대상 볼트는 `vault="MS_Brain.nosync"` 파라미터로 명시합니다.
+- **Verify CLI**: `which obsidian`으로 CLI 가용성을 확인하고, 대상 볼트는 `vault="MS_Thoughts.nosync" (또는 "MS_Library.nosync")` 파라미터로 명시합니다.
 - **Gotcha Check**: [gotchas.md](./references/gotchas.md)를 읽고 앱 세션 충돌 및 인덱스 지연 오류를 방지합니다.
 
 ### Phase 1: Target Identification

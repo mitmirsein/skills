@@ -1,0 +1,4 @@
+interface:
+  display_name: "Book Research"
+  short_description: "Compare evidence-backed claims across books."
+  default_prompt: "Compare evidence-backed claims across selected books for my research question."

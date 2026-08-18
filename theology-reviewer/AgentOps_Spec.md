@@ -1,6 +1,6 @@
 # Theology Reviewer AgentOps Spec
 
-This file defines the skill-to-skill contracts for `theology-reviewer`. It intentionally excludes `MS_Brain.nosync/500 Parrehsia/parrehsia`; that frontend is not part of the automatic review pipeline.
+This file defines the skill-to-skill contracts for `theology-reviewer`. It intentionally excludes `MS_Library.nosync/500 Parrehsia/parrehsia`; that frontend is not part of the automatic review pipeline.
 
 ## Core Roles
 
@@ -18,8 +18,8 @@ This file defines the skill-to-skill contracts for `theology-reviewer`. It inten
 - Phase 0 output: `QuerySet.json`, `EvidencePack.json`, `ToolLog.json`.
 - Phase 1 output: `handoff_packet.json`.
 - Phase 2 output: `verified_claims.json`, `transparency_report.md`, `p2_handoff_packet.json`.
-- Final review location: `MS_Brain.nosync/000 System/Inbox/Review_Reports`.
-- Evidence location: `MS_Brain.nosync/000 System/Inbox/Evidence`.
+- Final review location: `MS_Thoughts.nosync/000 System/Inbox/Review_Reports`.
+- Evidence location: `MS_Thoughts.nosync/000 System/Inbox/Evidence`.
 
 ## Operating Rules
 

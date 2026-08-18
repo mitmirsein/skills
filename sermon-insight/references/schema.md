@@ -43,7 +43,7 @@ inputs:
 ---
 
 ## 3. 출력 사양 (Output Specification)
-최종 결과물은 다음 구조의 마크다운 파일로 작성되어 지정된 경로인 `~/Desktop/MS_Brain.nosync/000 System/Inbox/sermon-insight/` 디렉터리 하위에 자동 저장된다. 파일명은 `SI-[년월일]-[논문식별자].md`로 구성한다.
+최종 결과물은 다음 구조의 마크다운 파일로 작성되어 지정된 경로인 `~/Desktop/MS_Thoughts.nosync/000 System/Inbox/sermon-insight/` 디렉터리 하위에 자동 저장된다. 파일명은 `SI-[년월일]-[논문식별자].md`로 구성한다.
 
 ```markdown
 ---

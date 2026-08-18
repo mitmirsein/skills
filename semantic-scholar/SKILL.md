@@ -40,11 +40,11 @@ status: active
 uv run python .skills/semantic-scholar/scripts/s2_runner.py --query "Pauline justification ethics" --limit 5
 
 # 리포트 파일로 저장
-uv run python .skills/semantic-scholar/scripts/s2_runner.py --query "Dietrich Bonhoeffer Sermon on the Mount" --limit 10 --output "$HOME/Desktop/MS_Brain.nosync/010 Inbox/S2_Bonhoeffer_Report.md"
+uv run python .skills/semantic-scholar/scripts/s2_runner.py --query "Dietrich Bonhoeffer Sermon on the Mount" --limit 10 --output "$HOME/Desktop/MS_Library.nosync/600 Kerygma - Journals/S2_Bonhoeffer_Report.md"
 ```
 
 ## ⚙️ 아키텍처 및 설정 (Architecture)
 
 1. **Authentication**: `~/Desktop/MS_Dev.nosync/.env` 파일 내 `SEMANTIC_SCHOLAR_API_KEY`를 사용합니다. 키가 없어도 동작하지만 심각한 Rate Limit(3초당 1회)가 걸립니다.
-2. **Output Format**: 생성되는 Markdown 리포트는 서지 정보(Authors, Year, Venue, Citations, Links, Abstract)를 포함하여 MS_Brain.nosync 지식망에 즉시 편입할 수 있도록 규격화되어 있습니다.
+2. **Output Format**: 생성되는 Markdown 리포트는 서지 정보(Authors, Year, Venue, Citations, Links, Abstract)를 포함하여 MS_Library.nosync 지식망에 즉시 편입할 수 있도록 규격화되어 있습니다.
 3. **Legacy Fallback**: 과거 ChromaDB와 연동된 다중 검색 엔진 모듈은 `scripts/legacy_researcher.py`에 보존되어 있습니다.

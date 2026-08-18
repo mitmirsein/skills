@@ -219,15 +219,15 @@ class RissScraper:
         return {"control_no": control_no, "abstract": "상세 정보를 불러올 수 없습니다.", "metadata": {}}
 
     def _parse_detail(self, soup: BeautifulSoup, control_no: str) -> dict:
-        # div.textWrap, div.text.off, div.abstractFull 등 다양한 태그 탐색
-        abstract_tags = soup.select(
-            "div.abstractFull, div.abstract_box, #abstract, .abstract_txt, div.textWrap, div.text.off"
-        )
+        # div.abstractFull, div.abstract_box, #abstract, .abstract_txt, div.textWrap, div.text.off 탐색
         abstract = ""
-        for tag in abstract_tags:
-            text = tag.get_text(strip=True)
-            if text:
-                abstract += text + "\n\n"
+        for sel in ["div.abstractFull", "div.abstract_box", "#abstract", ".abstract_txt", "div.textWrap", "div.text.off"]:
+            el = soup.select_one(sel)
+            if el:
+                text = el.get_text(strip=True)
+                if text:
+                    abstract = text
+                    break
 
         if not abstract:
             abstract = "초록 정보가 제공되지 않습니다."
@@ -370,7 +370,15 @@ async def main():
             if result.get("metadata"):
                 print("\n**메타데이터**:")
                 for k, v in result["metadata"].items():
-                    print(f"- **{k}**: {v}")
+                    if "URL" in k or v.startswith("http"):
+                        print(f"- **{k}**: [{v}]({v})")
+                    else:
+                        print(f"- **{k}**: {v}")
+                provider = result["metadata"].get("제공처", "")
+                pub_url = result["metadata"].get("발행기관 URL", "")
+                if "DBpia" in provider or "KISS" in provider or pub_url:
+                    print("\n> [!TIP]")
+                    print("> **학회 홈페이지 원문 다운로드 팁**: KCI/RISS에서 상업 유통(DBpia/KISS)으로 분류된 국내 학술지 논문은 저널 발행 학회 공식 홈페이지(원문자료실/과월호) 또는 학회 전용 JAMS 포털에서 대부분 무료 Open Access로 원문 PDF를 다운로드할 수 있습니다.")
 
     elif args.query:
         results, audit_stats = await scraper.search(

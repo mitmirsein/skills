@@ -247,11 +247,11 @@ Glossary는 반드시 **2-tier 구조**로 작성한다.
     Auferstehung als Tatsache_Spiess.md
 ```
 
-**최종 안치 경로**: `MS_Brain.nosync / 000 System / Inbox / Raw /`
+**최종 안치 경로**: `MS_Library.nosync/000 System/Inbox/Raw/`
 ```bash
-mv "[최종파일명].md" "$HOME/Desktop/MS_Brain.nosync/000 System/Inbox/Raw/"
+mv "[최종파일명].md" "$HOME/Desktop/MS_Library.nosync/000 System/Inbox/Raw/"
 ```
-> 이후 `wiki` 스킬 파이프라인을 통해 `I-Library/100 Theology` 서고로 정식 승격.
+> 이후 `MS_Library.nosync/100 Theology` 서고로 정식 승격.
 
 ---
 

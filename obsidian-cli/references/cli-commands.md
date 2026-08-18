@@ -4,7 +4,7 @@ Obsidian 공식 CLI(v1.12.x+)를 사용하여 볼트를 제어하기 위한 명�
 
 ## 🔧 Basic Syntax
 ```bash
-obsidian <command> [parameters] vault="MS_Brain.nosync" 2>/dev/null
+obsidian <command> [parameters] vault="MS_Thoughts.nosync" 2>/dev/null
 ```
 
 ## 📂 Command Groups

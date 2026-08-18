@@ -62,4 +62,9 @@ data = json.loads(result.stdout)
 (주의: `subprocess`는 `~`를 확장하지 않으므로 반드시 `expanduser`를 거친다.)
 
 ## 응답 필드
-`title`, `title_eng`, `artiId`, `authors` (이름 배열), `affiliations` (소속기관 배열), `author_count`, `journal` (학술지명), `publisher`, `pub_year`, `pub_mon`, `doi`, `uci`, `citation_kci`, `citation_wos`, `abstract`, `url`
+`title`, `title_eng`, `artiId`, `authors` (이름 배열), `affiliations` (소속기관 배열), `author_count`, `journal` (학술지명), `publisher` (발행학회/기관명), `pub_year`, `pub_mon`, `doi`, `uci`, `citation_kci`, `citation_wos`, `abstract`, `url`
+
+## 💡 학회 홈페이지 및 JAMS 원문 획득 전략 (Society Archive Open Access)
+- **KCI 직다운로드 차단 시 대안**: KCI 포털에서 직접 원문 다운로드가 막혀 있거나 상업 유통(DBpia/KISS)으로 유도되는 국내 학술지 논문은 `publisher`(발행학회)의 공식 홈페이지나 학회 전용 JAMS 포털(`*.jams.or.kr`)에서 무료 Open Access로 원문 PDF를 제공하는 경우가 많습니다.
+- **실행 권장사항**: KCI 검색 결과에서 `journal` 및 `publisher` 정보를 확인한 뒤, 해당 학회 홈페이지(예: 한국신약학회 `ntsk.org`, 한국복음주의신학회 `kets.org` 등)의 '논문자료실'/'과월호'/'원문서비스' 또는 JAMS 시스템을 통해 무료 PDF를 직접 확보합니다.
+

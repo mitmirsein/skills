@@ -13,6 +13,6 @@ Obsidian CLI와 파일 시스템 직접 조작 사이의 균형 및 안전 운�
 
 ## 🛡️ Operational Rules
 1. **GUI Focus Prohibition**: 백그라운드 환경에서 `open`, `command` 등 GUI 포커스를 요구하는 명령은 충돌(Exit 133)을 일으키므로 절대 사용하지 마십시오.
-2. **Path & Vault**: 항상 절대 경로(`~/bin/obsidian`)와 `vault="MS_Brain.nosync"`를 명시하십시오.
+2. **Path & Vault**: 항상 절대 경로(`~/bin/obsidian`)와 `vault="MS_Thoughts.nosync"`를 명시하십시오.
 3. **JSON Parsing**: 검색 및 목록 조회 시 `format=json` 플래그를 사용하여 결과의 가독성과 처리 용이성을 확보하십시오.
 4. **Stderr Suppression**: `2>/dev/null`을 사용하여 불필요한 로딩 메시지나 경고가 출력되지 않도록 하십시오.

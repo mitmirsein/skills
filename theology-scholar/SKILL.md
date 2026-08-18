@@ -118,7 +118,7 @@ status: active
 - **Entry Gate**: Phase 4 Audit PASS + 사용자 결재(🔲 HITL) 완료.
 - **Recursive Critique**: 감사 결과 자체의 AI 편향 및 블러핑 여부를 `#criticalthink` 로직으로 최종 검열합니다.
 - **Exit Gate**: Anti-Bluffing Check PASS → **[DELIVER]** 최종 산출물 제출.
-  *   **⚠️ 산출물 보존 위치 원칙**: 최종 산출물을 포함한 모든 중간 문서(Skeleton, Hypothesis, Arena_Log, Draft 등)는 기본적으로 작업을 수행하는 로컬 개발 공간(예: `MS_Dev.nosync/scratch/` 또는 호출된 작업 디렉토리) 내에 생성 및 통합 보존해야 한다. Obsidian 볼트(`MS_Brain.nosync`)로 직접 발행하거나 이관하는 행위는 사용자의 명시적 지시가 있는 경우에만 수행하며, 임의로 볼트 경로에 파일을 생성하지 않는다.
+  *   **⚠️ 산출물 보존 위치 원칙**: 최종 산출물을 포함한 모든 중간 문서(Skeleton, Hypothesis, Arena_Log, Draft 등)는 기본적으로 작업을 수행하는 로컬 개발 공간(예: `MS_Dev.nosync/scratch/` 또는 호출된 작업 디렉토리) 내에 생성 및 통합 보존해야 한다. Obsidian 볼트(`MS_Library.nosync` 또는 `MS_Thoughts.nosync`)로 직접 발행하거나 이관하는 행위는 사용자의 명시적 지시가 있는 경우에만 수행하며, 임의로 볼트 경로에 파일을 생성하지 않는다.
 
 ## 3. Reference Links
 - [gotchas.md](./references/gotchas.md): 학술적 타협 및 환각 방지 가이드.
