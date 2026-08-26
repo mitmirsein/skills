@@ -20,7 +20,8 @@ from typing import List, Dict, Any, Optional
 import requests
 
 # Crossref API Polite Pool configuration
-USER_AGENT = "AntigravityTheologyBot/1.0 (mailto:msn@example.com)"
+CONTACT_EMAIL = os.environ.get("CROSSREF_MAILTO", "researcher@example.com")
+USER_AGENT = f"AntigravityTheologyBot/1.0 (mailto:{CONTACT_EMAIL})"
 CROSSREF_API_URL = "https://api.crossref.org/works"
 
 class CrossrefJournalSearcher:
